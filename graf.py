@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
-import datetime
+
 from start import bitcoin_price,graf_data
 
 table_bit=bitcoin_price["prices"]
-x1=[datetime.datetime.fromtimestamp(int(str(el[0])[:-3])) for el in table_bit]
+x1=[el[0] for el in table_bit]
 y=[el[1] for el in table_bit]
 
 fig=plt.figure()
