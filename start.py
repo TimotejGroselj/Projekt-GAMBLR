@@ -6,5 +6,4 @@ bitcoin_price=requests.get(url).json()
 graf_data=requests.get(url2).json()
 for key in bitcoin_price:
     bitcoin_price[key]=[[datetime.datetime.fromtimestamp(int(str(el[0])[:-3])),el[1]] for el in bitcoin_price[key]]
-
-
+asdasdwea
