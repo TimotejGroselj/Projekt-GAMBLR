@@ -13,7 +13,7 @@ def bot(podatki,money,kdm,kdv,kdp,km):
     kdm=koef v % (vrednosti od 0 do 1) kolk na odločitev vpliva delta eme
     kdv=koef v % (vrednosti od 0 do 1) kolk na odločitev vpliva delta cene
     kdp=koef v % (vrednosti od 0 do 1) kolk na odločitev vpliva razdalja od max in min
-    km=koef v % (vrednosti od 0 do 1) kolk mone dava notr/vn glede na izračunano številko
+    km=procent kolk mone dava notr/vn glede na izračunano številko 
 
     """
     investicije=dict()
