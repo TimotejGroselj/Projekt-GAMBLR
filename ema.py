@@ -5,6 +5,8 @@ import pickle as kumarca
 
 class EMA:
     def __init__(self,N,smoothing=2):
+        """Ustvari slovar,kjer so ključi imena kovancev,
+        vrednosti pa slovarji oblike {datum:cena} za vsak datum"""
         with open("data.bin","rb") as data:
             coin_p = kumarca.load(data)
             alpha = smoothing / (N + 1)
@@ -16,19 +18,20 @@ class EMA:
                 for datum in prices:
                     if EMAp == 0:
                         EMAp = prices[datum]
-                    else:
-                        value = prices[datum]
-                        EMAt = alpha * value + (1 - alpha) * EMAp
-                        pomozn[datum] = EMAt
-                        EMAp = EMAt
+                    value = prices[datum]
+                    EMAt = alpha * value + (1 - alpha) * EMAp
+                    pomozn[datum] = EMAt
+                    EMAp = EMAt
                 slovar_em[kovanc] = pomozn
         self.slovar_em = slovar_em
         self.N = N
 
     def getcoinEMAs(self,coin):
+        """Vrne slovar {datum:price} em za dani kovanec"""
         return self.slovar_em[coin]
 
     def getLatestEMA(self,coin):
+        """Vrne današnjo emo za dani kovanec"""
         day = date.today().strftime("%d-%m-%Y")
         return self.slovar_em[coin][day]
 
@@ -36,7 +39,7 @@ class EMA:
 
 
 upam = EMA(45)
-print(upam.getcoinEMAs("bitocin"))
+print(upam.getcoinEMAs("bitcoin"))
 print(upam.getLatestEMA("bitcoin"))
 
 
