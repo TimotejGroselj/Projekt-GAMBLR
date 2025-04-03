@@ -6,7 +6,7 @@ class coin():
         data_=[json["prices"],json["market_caps"],json["total_volumes"]]
         data=[dict(),dict(),dict()]
         for i in range(len(data_[0])):
-            lep_datum=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d %H:%M:%S")
+            lep_datum=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d")
             for j in range(3):
                 data[j][lep_datum]=data_[j][i][1]
         [self.prices,self.market_caps,self.total_volumes]=data
