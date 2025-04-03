@@ -4,7 +4,7 @@ from datetime import date
 import pickle as kumarca
 
 class EMA:
-    def __init__(self,N,smoothing=2):
+    def __init__(self,N,dat = date.today().strftime("%d-%m-%Y"),smoothing=2):
         """Ustvari slovar,kjer so ključi imena kovancev,
         vrednosti pa slovarji oblike {datum:cena} za vsak datum"""
         with open("data.bin","rb") as data:
@@ -22,6 +22,7 @@ class EMA:
                     EMAt = alpha * value + (1 - alpha) * EMAp
                     pomozn[datum] = EMAt
                     EMAp = EMAt
+                    if datum == dat: break
                 slovar_em[kovanc] = pomozn
         self.slovar_em = slovar_em
         self.N = N
@@ -37,7 +38,7 @@ class EMA:
 
 
 
-
+#mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning
 upam = EMA(45)
 print(upam.getcoinEMAs("bitcoin"))
 print(upam.getLatestEMA("bitcoin"))
