@@ -7,8 +7,12 @@
 # procenti za use te vrednosti k jih bo treba zbruteforcat da bojo prou
 ###
 import datetime
+import pickle
+from classdat import coin
+
 def bot(podatki,money,kdm,kdv,kdp,km):
     """
+    podatki=
     money=mone
     kdm=koef v % (vrednosti od 0 do 1) kolk na odločitev vpliva delta eme
     kdv=koef v % (vrednosti od 0 do 1) kolk na odločitev vpliva delta cene
