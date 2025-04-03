@@ -44,4 +44,4 @@ class RSI:
 
 
 hopagen = RSI(5)
-print(hopagen.RSIforcoin('bitcoin'))
+print(hopagen.RSIforcoin('binancecoin'))
