@@ -7,7 +7,7 @@ from math import floor
 with open("data.bin","rb") as data:
     coin_prices=pickle.load(data)
     
-    fig=plt.figure(figsize=[19.2,10.8])
+    fig=plt.figure(figsize=[19.2*0.8,10.8*0.8])
 
     for obj_coin in coin_prices.values():
         d=len(obj_coin.getprices())

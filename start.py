@@ -1,5 +1,4 @@
 import requests
-import datetime
 import time
 import pickle
 from classdat import coin
