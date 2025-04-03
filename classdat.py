@@ -1,6 +1,9 @@
 import datetime
 import requests
 class coin():
+    """
+    
+    """
     def __init__(self,json,name):
         self.name=name
         data_=[json["prices"],json["market_caps"],json["total_volumes"]]
