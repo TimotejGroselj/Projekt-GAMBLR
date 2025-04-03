@@ -1,17 +1,21 @@
 import matplotlib.pyplot as plt
+import pickle
+from classdat import coin
+from math import floor
+with open("data.bin","rb") as data:
+    coin_prices=pickle.load(data)
+    
+    fig=plt.figure(figsize=[19.2,10.8])
 
-from start import coin_prices,graf_data
-
-table_bit=coin_prices["prices"]
-x=[]
-for coin in coin_prices:
-    x.append([el[0] for el in coin_prices["prices"][:-1]])
-    y=[el[1] for el in coin_prices["prices"][:-1]]
-
-fig=plt.figure()
-for coinx in x:
-    plt.plot(coinx,y,label="price graph in USD")
+    for obj_coin in coin_prices.values():
+        d=len(obj_coin.getprices())
+        break
+        
+    for obj_coin in coin_prices.values():
+        plt.semilogy(list(obj_coin.getprices().keys()),list(obj_coin.getprices().values()),label=obj_coin.getname(),linewidth =2.5,)
+        plt.xticks([list(obj_coin.getprices().keys())[i] for i in range(1,d,floor(d/5)-1)])
     plt.xlabel("date")
     plt.ylabel("price in USD")
     plt.legend()
+
     plt.show()

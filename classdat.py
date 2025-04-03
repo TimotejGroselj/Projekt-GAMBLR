@@ -17,6 +17,8 @@ class coin():
         return self.market_caps
     def gettotal_volumes(self):
         return self.total_volumes
+    def getname(self):
+        return self.name
     def __str__(self):
         return f"Data of {self.name} with info about prices,market caps and total volumes from {min(self.getprices().keys())} to {max(self.getprices().keys())}."
     
