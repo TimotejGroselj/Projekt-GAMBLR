@@ -51,13 +51,12 @@ class RSI:
                 pomozn = dict(reversed(pomozn.items()))
                 slovar_rsi[kovanc] = pomozn
             self.slovar_rsi = slovar_rsi
-            self.N = N
 
-    def RSIforcoin(self,coin):
+    def getcoinRSIs(self,coin):
         """Vrne RSI od določenega datuma nazaj za dani coin"""
         return self.slovar_rsi[coin]
 
 
-hopagen = RSI(14)
-print(hopagen.RSIforcoin('bitcoin'))
+hopagen = RSI(14,"2025-02-16")
+print(hopagen.getcoinRSIs('bitcoin'))
 

@@ -34,7 +34,7 @@ class EMA:
 
 
 #mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning
-upam = EMA(45,"17-03-2025")
+upam = EMA(45,"2025-03-17")
 print(upam.getcoinEMAs("bitcoin"))
 
 

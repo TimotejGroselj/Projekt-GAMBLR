@@ -30,9 +30,9 @@ class SMA:
                 slovar_sma[kovanc] = pomozn
         self.slovar_sma = slovar_sma
 
-    def SMAforcoin(self,coin):
+    def getcoinSMAs(self,coin):
         """Vrne SMA za dani kovanec"""
         return self.slovar_sma[coin]
 
-lala = SMA(5,"22-03-2025") #lesgoooo datum is werking
-print(lala.SMAforcoin("bitcoin"))
+lala = SMA(5,"2025-03-13") #lesgoooo datum is werking
+print(lala.getcoinSMAs("bitcoin"))
