@@ -49,7 +49,7 @@ class EMA_bot(bot):
         ter vrne slovar oblike {dan:efekt emme} ki bo pol odloču kaj se zgodi investiciji tist dan za en coin
         """
 
-        ema=EMA(self.N).getcoinEMAs(coin_id,do_dneva)
+        ema=EMA(self.N,self.do_dneva).getcoinEMAs(coin_id) #class EMA(N,do_dneva), metoda get coin ima samo en parameter :)
         date_range=sorted(list(ema.keys()))
 
         le_god=dict()
