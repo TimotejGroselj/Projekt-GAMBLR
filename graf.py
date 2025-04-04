@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from math import floor
+from ema import EMA
+from rsi import RSI
 
 import pickle
 from classdat import coin
@@ -43,4 +45,25 @@ with open("data.bin","rb") as data:
     
     
     
+    for coin_id in coin_prices.keys():
+        fig=plt.figure(figsize=[19.2,10.8])
+        for N in [2,12,20]:
+            plt.plot(list(EMA(N).getcoinEMAs(coin_id).keys()),list(EMA(N).getcoinEMAs(coin_id).values()),label=f"N={N}")
+            plt.xticks([list(EMA(N).getcoinEMAs(coin_id).keys())[i] for i in range(0,d,floor(d/12))])
+        plt.xlabel("date")
+        plt.ylabel(coin_id)
+        plt.title(coin_id)
+        plt.legend()
+        fig.savefig(f"EMAS\\EMAS for {coin_id}.pdf",bbox_inches="tight")
     
+
+    for coin_id in coin_prices.keys():
+        fig=plt.figure(figsize=[19.2,10.8])
+        for N in [5,14,50]:
+            plt.plot(list(RSI(N).RSIforcoin(coin_id).keys()),list(EMA(N).RSIforcoin(coin_id).values()),label=f"N={N}")
+            plt.xticks([list(EMA(N).RSIforcoin(coin_id).keys())[i] for i in range(0,d,floor(d/12))])
+        plt.xlabel("date")
+        plt.ylabel(coin_id)
+        plt.title(coin_id)
+        plt.legend()
+        fig.savefig(f"RSI\\RSI for {coin_id}.pdf",bbox_inches="tight")

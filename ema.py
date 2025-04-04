@@ -39,9 +39,9 @@ class EMA:
 
 
 #mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning
-upam = EMA(45)
-print(upam.getcoinEMAs("bitcoin"))
-print(upam.getLatestEMA("bitcoin"))
+#upam = EMA(45)
+#print(upam.getcoinEMAs("bitcoin"))
+#print(upam.getLatestEMA("bitcoin"))
 
 
 
