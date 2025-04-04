@@ -29,7 +29,7 @@ class RSI:
         """
         with open("data.bin", "rb") as data:
             coin_p = kumarca.load(data)
-            slovar_sma = {}
+            slovar_rsi = {}
             for i in coin_p.values():
                 kovanc,prices = i.getname(),i.getprices()
                 prices = dict(reversed(prices.items()))
@@ -49,15 +49,15 @@ class RSI:
                         rsi = pridobiRSI(tab[i:i + N])
                         pomozn[datum] = rsi
                 pomozn = dict(reversed(pomozn.items()))
-                slovar_sma[kovanc] = pomozn
-            self.slovar_sma = slovar_sma
+                slovar_rsi[kovanc] = pomozn
+            self.slovar_rsi = slovar_rsi
             self.N = N
 
     def RSIforcoin(self,coin):
         """Vrne RSI od določenega datuma nazaj za dani coin"""
-        return self.slovar_sma[coin]
+        return self.slovar_rsi[coin]
 
 
-hopagen = RSI(14,)
+hopagen = RSI(14)
 print(hopagen.RSIforcoin('bitcoin'))
 
