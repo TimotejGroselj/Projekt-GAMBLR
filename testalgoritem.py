@@ -62,9 +62,12 @@ class EMA_bot(bot):
         """
         glede na god param se odloč al bomo kupl al prodal
         """
+        how_much_coin=0
+        #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
         for key,val in self.calculato_faze(do_dneva,coin_id):
             if val>god_param_invest:
                 self.investicije[key]=((val-god_param_invest)*self.km)*self.cene[coin_id].getprices()[key]
             if val<god_param_dropout:
                 self.investicije[key]=-((god_param_dropout-val)*self.km)*self.cene[coin_id].getprices()[key]
-        
+            if how_much_coin<0:
+                how_much_coin=0
