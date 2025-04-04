@@ -2,7 +2,12 @@ import datetime
 import requests
 class coin():
     """
-    
+    nrdi class coina ki drzi:
+    datume
+    sl cen
+    sl market caps
+    sl total volumnu
+    ime coina
     """
     def __init__(self,json,name):
         self.name=name
