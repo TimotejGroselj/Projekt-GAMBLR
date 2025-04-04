@@ -31,17 +31,12 @@ class EMA:
         """Vrne slovar {datum:price} em za dani kovanec"""
         return self.slovar_em[coin]
 
-    def getLatestEMA(self,coin):
-        """Vrne današnjo emo za dani kovanec"""
-        day = date.today().strftime("%Y-%m-%d")
-        return self.slovar_em[coin][day]
-
 
 
 #mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning
-#upam = EMA(45)
-#print(upam.getcoinEMAs("bitcoin"))
-#print(upam.getLatestEMA("bitcoin"))
+upam = EMA(45)
+print(upam.getcoinEMAs("bitcoin"))
+print(upam.getLatestEMA("bitcoin"))
 
 
 
