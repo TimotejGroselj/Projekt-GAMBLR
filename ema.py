@@ -4,7 +4,7 @@ from datetime import date
 import pickle as kumarca
 
 class EMA:
-    def __init__(self,N,dat = date.today().strftime("%d-%m-%Y"),smoothing=2):
+    def __init__(self,N,dat = date.today().strftime("%Y-%m-%d"),smoothing=2):
         """Ustvari slovar,kjer so ključi imena kovancev,
         vrednosti pa slovarji oblike {datum:cena} za vsak datum"""
         with open("data.bin","rb") as data:

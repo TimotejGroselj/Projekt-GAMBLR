@@ -4,7 +4,7 @@ import pickle as kumarca
 
 
 class SMA:
-    def __init__(self,N,dat = date.today().strftime("%d-%m-%Y")):
+    def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
         """
         :param N: na vsake N dni izračuna SMA
         :param datum: od katerega datuma nazaj želi izračunat SMA
