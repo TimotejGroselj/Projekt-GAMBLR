@@ -9,9 +9,11 @@
 import datetime
 import pickle
 from classdat import coin
+from ema import EMA
+from last_day import yesterday
 
 class bot:
-    def __init__(self,cene,kdv,kdp,km,money=10000):
+    def __init__(self,cene,kdv,km,money=10000):
         """
         cene=sl. classu coin
         money=mone to spend
@@ -25,7 +27,6 @@ class bot:
         #če na dan nč ne nrdiš ni elementa
         self.cene=cene
         self.kdv=kdv
-        self.kdp=kdp
         self.km=km
         self.mone=money
         self.date=list(self.cene.values().keys()).sorted()
@@ -45,18 +46,34 @@ class bot:
         
 class EMA_bot(bot):
     """
-    bot, ki simulira obnašanje eme 
+    bot, ki simulira obnašanje eme
     """        
-    def __init__(self, cene, kdv, kdp, km, kdm, money=10000):
-        super().__init__(cene, kdv, kdp, km, money)
+    def __init__(self, cene, kdv, km, kdm, N, money=10000):
+        super().__init__(cene, kdv, km, money)
         self.kdm=kdm
-    def calculato_faze(self,do_dneva):
+        self.N=N
+    def calculato_faze(self,do_dneva,coin_id):
         """
-        do dneva je str oblike '%d-%m-%Y', ki pove do katerega datuma upošteva podatke
-        ter vrne le magič number, ki bo pol odločla kaj se zgodi investiciji
+        do dneva je str oblike '%Y-%m-%d', ki pove do katerega datuma upošteva podatke
+        ter vrne slovar oblike {dan:sl} in sl oblike {effekt value:vr,effekt metode:vr}, ki bo pol odloču kaj se zgodi investiciji tist dan za en coin
         """
-        
-        
+        coin_obj=self.cene[coin_id]
+        coin_p=coin_obj.getprices()
+        alldate=coin_obj.getdates()
+        if do_dneva not in alldate:
+            raise Exception("Invalid date")
+        ema=EMA(self.N).getcoinEMAs(coin_id,do_dneva)
+        date_range=[]
+        for el in alldate:
+            if el == do_dneva:
+                break
+            else:
+                date_range.append(el)
+        le_god=dict()
+        for key in date_range[1:]:
+            le_god[key]={"value_ef":(coin_p[yesterday(key)]-coin_p[key])*self.kdv,"method_ef":(ema[yesterday]-ema[key])*self.kdm}
+            
+        return le_god
     
 
 
