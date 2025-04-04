@@ -2,8 +2,27 @@ from classdat import coin
 from datetime import date
 import pickle as kumarca
 
+
 class RSI:
-    def __init__(self,N,datum = date.today().strftime("%d-%m-%Y")):
+    def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
+        def pridobiRSI(sez):
+            """Hidden function: pridobi rsi za time period"""
+            prej = sez[0]
+            gain, loss = 0, 0
+            dolz = len(sez)
+            for i in range(1, dolz):
+                change = prej - sez[i]
+                if change > 0:
+                    gain += change
+                else:
+                    loss += abs(change)
+                prej = sez[i]
+            gain /= dolz
+            loss /= dolz
+            if loss == 0:
+                return 100
+            rs = gain / loss
+            return 100 - (100 / (1 + rs))
         """
         :param N: na podlagi zadnjih N dni (closing days) izračuna RSI
         :param datum: od katerega datuma nazaj želi izračunat RSI
@@ -14,34 +33,31 @@ class RSI:
             for i in coin_p.values():
                 kovanc,prices = i.getname(),i.getprices()
                 prices = dict(reversed(prices.items()))
-                k,countd = 0,0
-                gain,loss = 0,0
-                for date,price in prices.items():
-                    if date == datum:
-                        k = 1
-                        prej = price
-                    if countd == N:
-                        break
-                    if k == 1:
-                        change = prej - price
-                        if change < 0:
-                            loss += abs(change)
-                        else:
-                            gain += change
-                        prej = price
-                        countd += 1
-                loss /= N
-                gain /= N
-                RS = gain / loss
-                RSI = 100 - (100 / (1 + RS))
-                slovar_sma[kovanc] = {N:RSI}
+                tab = list(prices.values())
+                id = list(prices).index(dat)
+                dolz, ost = len(tab), len(prices) % N
+                pomozn = {}
+                for i,datum in enumerate(prices):
+                    if i < id:
+                        continue
+                    if i == dolz - ost:
+                        rsi = pridobiRSI(tab[i:])
+                        continue
+                    elif i > dolz - ost:
+                        pomozn[datum] = rsi
+                    else:
+                        rsi = pridobiRSI(tab[i:i + N])
+                        pomozn[datum] = rsi
+                pomozn = dict(reversed(pomozn.items()))
+                slovar_sma[kovanc] = pomozn
             self.slovar_sma = slovar_sma
             self.N = N
 
     def RSIforcoin(self,coin):
-        """Vrne RSI za zadnjih N dni za dani coin"""
-        return self.slovar_sma[coin][self.N]
+        """Vrne RSI od določenega datuma nazaj za dani coin"""
+        return self.slovar_sma[coin]
 
 
-hopagen = RSI(5)
-print(hopagen.RSIforcoin('binancecoin'))
+hopagen = RSI(14,)
+print(hopagen.RSIforcoin('bitcoin'))
+
