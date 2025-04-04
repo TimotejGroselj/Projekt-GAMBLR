@@ -28,8 +28,10 @@ class bot:
         """
         if sum(list(self.investicije.value()))+amount<=self.mone:
             self.investicije[date]=amount
+            self.mone+=amount
         elif sum(list(self.investicije.value()))<=self.mone:
             self.investicije[date]=self.mone-sum(list(self.investicije.value()))
+            self.mone=0
         return None
         
 class EMA_bot(bot):
@@ -66,8 +68,14 @@ class EMA_bot(bot):
         #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
         for key,val in self.calculato_faze(do_dneva,coin_id):
             if val>god_param_invest:
-                self.investicije[key]=((val-god_param_invest)*self.km)*self.cene[coin_id].getprices()[key]
+                kok_dnarja=(val-god_param_invest)*self.km*self.mone
+                self.invest(key,-kok_dnarja)
+                kok_coina=kok_dnarja/self.cene[coin_id].getprices()[key]
+                how_much_coin+=kok_coina
             if val<god_param_dropout:
-                self.investicije[key]=-((god_param_dropout-val)*self.km)*self.cene[coin_id].getprices()[key]
+                kok_coina=(god_param_dropout-val)*self.km*how_much_coin
+                kok_dnarja=kok_coina*self.cene[coin_id].getprices()[key]
+                self.invest(key,kok_dnarja)
+                how_much_coin+=kok_coina
             if how_much_coin<0:
                 how_much_coin=0
