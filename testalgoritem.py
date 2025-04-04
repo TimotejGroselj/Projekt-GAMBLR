@@ -26,11 +26,11 @@ class bot:
         pozitivn amount: izplacava nek amount
         negativn amount: vlozva nek amount
         """
-        if sum(list(self.investicije.value()))+amount<=self.mone:
+        if sum(list(self.investicije.values()))+amount<=self.mone:
             self.investicije[date]=amount
             self.mone+=amount
-        elif sum(list(self.investicije.value()))<=self.mone:
-            self.investicije[date]=self.mone-sum(list(self.investicije.value()))
+        elif sum(list(self.investicije.values()))<=self.mone:
+            self.investicije[date]=self.mone-sum(list(self.investicije.values()))
             self.mone=0
         return None
         
@@ -51,7 +51,7 @@ class EMA_bot(bot):
         ter vrne slovar oblike {dan:efekt emme} ki bo pol odloču kaj se zgodi investiciji tist dan za en coin
         """
 
-        ema=EMA(self.N,self.do_dneva).getcoinEMAs(coin_id) #class EMA(N,do_dneva), metoda get coin ima samo en parameter :)
+        ema=EMA(self.N,do_dneva).getcoinEMAs(coin_id)
         date_range=sorted(list(ema.keys()))
 
         le_god=dict()
@@ -66,6 +66,7 @@ class EMA_bot(bot):
         """
         how_much_coin=0
         #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
+        #a to misls kok npr. bitocina je vredn $10 000 ? -> k pol je to sam ($10 000 aka self.mone)/(trenutna cena btc-ja v $).
         for key,val in self.calculato_faze(do_dneva,coin_id):
             if val>god_param_invest:
                 kok_dnarja=(val-god_param_invest)*self.km*self.mone
