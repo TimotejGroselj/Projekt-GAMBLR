@@ -3,7 +3,7 @@ from datetime import date
 import pickle as kumarca
 
 class RSI:
-    def __init__(self,N,datum = date.today().strftime("%d-%m-%Y")):
+    def __init__(self,N,datum = date.today().strftime("%Y-%m-%d")):
         """
         :param N: na podlagi zadnjih N dni (closing days) izračuna RSI
         :param datum: od katerega datuma nazaj želi izračunat RSI

@@ -9,7 +9,7 @@ class coin():
         data_=[json["prices"],json["market_caps"],json["total_volumes"]]
         data=[dict(),dict(),dict()]
         for i in range(len(data_[0])):
-            lep_datum=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%d-%m-%Y")
+            lep_datum=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d")
             for j in range(3):
                 data[j][lep_datum]=data_[j][i][1]
         [self.prices,self.market_caps,self.total_volumes]=data
@@ -22,6 +22,8 @@ class coin():
         return self.total_volumes
     def getname(self):
         return self.name
+    def getdates(self):
+        return sorted(list(self.getprices().keys()))
     def __str__(self):
         return f"Data of {self.name} with info about prices,market caps and total volumes from {min(self.getprices().keys())} to {max(self.getprices().keys())}."
     
