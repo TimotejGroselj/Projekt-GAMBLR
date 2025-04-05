@@ -1,10 +1,11 @@
-import random
+
 from classdat import coin
 import pickle as kumarca
 from ema import EMA
 from rsi import RSI
 from sma import SMA
 from last_day import yesterday
+
 
 class Gambler:
     def __init__(self,coin:str,dinarcki:float,shortN,longN,repozitorij=0):
@@ -20,6 +21,10 @@ class Gambler:
         with open("data.bin", "rb") as data:
             coin_price = kumarca.load(data)
         self.prices = coin_price[coin].getprices()
+
+    def checkmoni(self):
+        """Vrne koliko denarja imas"""
+        return self.repozitorij,self.dinarcki
 
     def buy(self,datum,buywith):
         """
@@ -45,9 +50,12 @@ class Gambler:
         self.repozitorij -= sellwith/self.prices[datum]
         return 'Succeeded'
 
-    def rsi_yes(self,datum,N=14):
+    def rsi_yes(self,datum,N=14): #TESTIRANO
         """Indicira a je market oversold, overbought al pa None"""
-        rsi_vceri = RSI(N).getTodayRSI(self.coin,yesterday(datum))
+        vceraj = yesterday(datum)
+        if vceraj not in self.prices:
+            return 0.5
+        rsi_vceri = RSI(N).getTodayRSI(self.coin,vceraj)
         if rsi_vceri < 30:
             return 1
         elif rsi_vceri > 70:
@@ -55,7 +63,7 @@ class Gambler:
         else:
             return 0.5
 
-    def ema_cross(self,datum,parameter):
+    def ema_cross(self,datum,parameter): #TESTIRANO
         """Ce short Ema - long Ema = nek parameter, potem strong buy, holda sam če je v rangu parametra"""
         razlika_em = EMA(self.shortN).getTodayEMA(self.coin,datum) - EMA(self.longN).getTodayEMA(self.coin,datum)
         if razlika_em > parameter:
@@ -64,7 +72,7 @@ class Gambler:
             return 0.5
         return 0
 
-    def ema_sma(self,datum):
+    def ema_sma(self,datum): #TESTIRANO
         """Če je overall cena nad emo in sma se kup, če je vmes se holda, sicer proda"""
         cena_danes = self.prices[datum]
         combinacije = [[self.shortN,self.shortN],[self.longN,self.longN],[self.longN,self.shortN],[self.shortN,self.longN]]
@@ -76,10 +84,11 @@ class Gambler:
                 sestevk += 1
             elif ema < cena_danes and sma < cena_danes:
                 continue
-            sestevk += 0.5
-        if 4 >= sestevk >= 3:
+            else:
+                sestevk += 0.5
+        if 4 >= sestevk >= 3: #tuki se da se mau igrt s stevilkami
             return 1
-        if 2.5 >= sestevk >= 1.5:
+        if 3 > sestevk >= 1:
             return 0.5
         return 0
 
@@ -96,16 +105,33 @@ class Gambler:
         return 'Sell'
 
 
-long_per = [21, 26, 50]
-short_per = [9, 12, 14]
-long,short = random.choice(long_per),random.choice(short_per)
-kombinacije_per = {}
+
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
 with open("data.bin", "rb") as data:
     coin_price = kumarca.load(data)
 kovanc = "bitcoin"
 price_k = coin_price[kovanc].getprices()
-for datum,price in price_k.items():
-    print(datum,price)
+
+
+#long_per = [21, 26, 50]
+#short_per = [9, 12, 14]
+tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)]
+"""
+for i in long_per:
+    for n in short_per:
+        tab_komb.append((n,i))
+print(tab_komb)
+"""
+gamb = Gambler(kovanc,10000,12,26)
+#nucam se kok hocm kupt/prodt, mby stop-loss in take-profit
+
+"""
+mozne = {}
+for i in tab_komb:
+    mozne[i] = 0
+    begin = Gambler(kovanc,start_dinarck,i[0],i[1])
+    for datum,price in price_k.items():
+        chosament = begin.startgambling(datum,300)
+"""
 
