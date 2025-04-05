@@ -36,8 +36,6 @@ class EMA:
         return self.slovar_em[coin][datum]
 
 
-#mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning
-
 
 
 

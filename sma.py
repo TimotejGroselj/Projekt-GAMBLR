@@ -7,7 +7,7 @@ class SMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
         """
         :param N: na vsake N dni izračuna SMA
-        :param datum: od katerega datuma nazaj želi izračunat SMA
+        :param dat: od katerega datuma nazaj želi izračunat SMA
         """
         with open("data.bin", "rb") as data:
             coin_p = kumarca.load(data)
@@ -38,5 +38,3 @@ class SMA:
         """Vrne danasnji SMA za dani kovanec"""
         return self.slovar_sma[coin][datum]
 
-#lala = SMA(5,) #lesgoooo datum is werking
-#print(lala.getcoinSMAs("bitcoin"))
