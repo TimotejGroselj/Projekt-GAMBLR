@@ -72,7 +72,6 @@ class EMA_bot(bot):
         """
         how_much_coin=0
         #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
-        #a to misls kok npr. bitocina je vredn $10 000 ? -> k pol je to sam ($10 000 aka self.delaunmone)/(trenutna cena btc-ja v $).
         for key,val in self.calculato_faze(do_dneva,coin_id):
             if val>god_param_invest:
                 kok_dnarja=(val-god_param_invest)*self.km*self.delaunmone
