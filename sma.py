@@ -34,5 +34,9 @@ class SMA:
         """Vrne SMA za dani kovanec"""
         return self.slovar_sma[coin]
 
-lala = SMA(5,"2025-03-13") #lesgoooo datum is werking
-print(lala.getcoinSMAs("bitcoin"))
+    def getTodaySMA(self,coin,datum):
+        """Vrne danasnji SMA za dani kovanec"""
+        return self.slovar_sma[coin][datum]
+
+#lala = SMA(5,) #lesgoooo datum is werking
+#print(lala.getcoinSMAs("bitcoin"))

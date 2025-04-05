@@ -31,6 +31,9 @@ class EMA:
         """Vrne slovar {datum:price} em za dani kovanec"""
         return self.slovar_em[coin]
 
+    def getTodayEMA(self,coin,datum):
+        """Vrne dandšnjo emo za dani kovanec"""
+        return self.slovar_em[coin][datum]
 
 
 #mmy dodj se datum not k bi mbi dibr sinergiziral (to je definitivno beseda) z rsi in sma in nasplosno machine learning

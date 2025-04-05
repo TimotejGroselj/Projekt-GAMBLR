@@ -56,7 +56,12 @@ class RSI:
         """Vrne RSI od določenega datuma nazaj za dani coin"""
         return self.slovar_rsi[coin]
 
+    def getTodayRSI(self,coin,date):
+        """Vrne današnji RSI"""
+        return self.slovar_rsi[coin][date]
 
-hopagen = RSI(14,"2025-02-16")
-print(hopagen.getcoinRSIs('bitcoin'))
+
+#hopagen = RSI(14)
+#print(hopagen.getcoinRSIs('bitcoin'))
+#print(hopagen.getTodayRSI("bitcoin",'2025-03-31'))
 
