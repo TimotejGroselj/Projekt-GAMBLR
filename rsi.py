@@ -42,6 +42,7 @@ class RSI:
                         continue
                     if i == dolz - ost:
                         rsi = pridobiRSI(tab[i:])
+                        pomozn[datum] = rsi
                         continue
                     elif i > dolz - ost:
                         pomozn[datum] = rsi
@@ -53,7 +54,7 @@ class RSI:
             self.slovar_rsi = slovar_rsi
 
     def getcoinRSIs(self,coin):
-        """Vrne RSI od določenega datuma nazaj za dani coin"""
+        """Vrne RSI do določenega datuma za dani coin"""
         return self.slovar_rsi[coin]
 
     def getTodayRSI(self,coin,date):
@@ -61,7 +62,4 @@ class RSI:
         return self.slovar_rsi[coin][date]
 
 
-#hopagen = RSI(14)
-#print(hopagen.getcoinRSIs('bitcoin'))
-#print(hopagen.getTodayRSI("bitcoin",'2025-03-31'))
 
