@@ -1,9 +1,11 @@
 import datetime
-import pickle
-from classdat import coin
 from ema import EMA
 from last_day import yesterday
-
+import pickle
+from classdat import coin
+with open("data.bin","rb") as data:
+    coin_prices=pickle.load(data)
+    
 class bot:
     def __init__(self,cene,km,money=10000):
         """
@@ -18,6 +20,10 @@ class bot:
         self.cene=cene
         self.km=km
         self.mone=money
+        self.delaunmone=money
+        for key in self.cene:
+            self.dates=self.cene[key].getdates()
+            break
     def invest(self,date,amount):
         """
         pove kolko investirat kir dan
@@ -26,12 +32,12 @@ class bot:
         pozitivn amount: izplacava nek amount
         negativn amount: vlozva nek amount
         """
-        if sum(list(self.investicije.values()))+amount<=self.mone:
+        if sum(list(self.investicije.values()))+amount<=self.delaunmone:
             self.investicije[date]=amount
-            self.mone+=amount
-        elif sum(list(self.investicije.values()))<=self.mone:
-            self.investicije[date]=self.mone-sum(list(self.investicije.values()))
-            self.mone=0
+            self.delaunmone+=amount
+        elif sum(list(self.investicije.values()))<=self.delaunmone:
+            self.investicije[date]=self.delaunmone-sum(list(self.investicije.values()))
+            self.delaunmone=0
         return None
         
 class EMA_bot(bot):
@@ -66,10 +72,10 @@ class EMA_bot(bot):
         """
         how_much_coin=0
         #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
-        #a to misls kok npr. bitocina je vredn $10 000 ? -> k pol je to sam ($10 000 aka self.mone)/(trenutna cena btc-ja v $).
+        #a to misls kok npr. bitocina je vredn $10 000 ? -> k pol je to sam ($10 000 aka self.delaunmone)/(trenutna cena btc-ja v $).
         for key,val in self.calculato_faze(do_dneva,coin_id):
             if val>god_param_invest:
-                kok_dnarja=(val-god_param_invest)*self.km*self.mone
+                kok_dnarja=(val-god_param_invest)*self.km*self.delaunmone
                 self.invest(key,-kok_dnarja)
                 kok_coina=kok_dnarja/self.cene[coin_id].getprices()[key]
                 how_much_coin+=kok_coina
@@ -80,3 +86,24 @@ class EMA_bot(bot):
                 how_much_coin+=kok_coina
             if how_much_coin<0:
                 how_much_coin=0
+    def simulato(self,god_param_invest,god_param_dropout):
+        """
+        simulira delovanje eme za eno leto za vse coine
+        """
+        result=dict()
+        for coin_obj in self.cene:
+            coin_id=coin_obj.getname()
+            for datum in self.dates:
+                self.decision_maker(god_param_invest,god_param_dropout,datum,coin_id)
+            result[coin_id]={"mone":self.delaunmone,"investicije":self.investicije}
+            self.investicije=dict()
+            self.delaunmone=self.mone
+        return result
+
+
+with open("data.bin","rb") as data:
+    coin_prices=pickle.load(data) 
+trainer=EMA_bot(coin_prices,0.2,1,20) 
+print(trainer.simulato(0,0))
+
+        
