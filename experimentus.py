@@ -117,25 +117,66 @@ with open("data.bin", "rb") as data:
     coin_price = kumarca.load(data)
 kovanc = "bitcoin"
 price_k = coin_price[kovanc].getprices()
+parameter = 400 #odvisn od kovanca
+tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)] #long_per = [21, 26, 50] #short_per = [9, 12, 14]
+startmoneh = 10000
 
+#I HOPE THIS DOES THA MACHINUS LERNUS
+#Edin rd bi shranjevou na en file (pickle perhaps??)
+todo = []
+for do in range(3):  # 1.kup/prodej
+    b = random.random()
+    s = random.random()
+    todo.append((b,s))
+    todo.append((s,s))
+    todo.append((b,b))
+todo.append((b,s))
 
-#long_per = [21, 26, 50]
-#short_per = [9, 12, 14]
-tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)]
+ns = [14] #2.N
+for nek_n in range(9):
+    n = random.randrange(1,100)
+    ns.append(n)
+
+for buy,sell in todo:
+    sl_n = {}
+    buy *= startmoneh
+    sell *= startmoneh
+    for n_ in ns:
+        gamb = Gambler(kovanc, startmoneh, 12, 26)
+        tab = [0,0,0]
+        sl_zas = {}
+        for i in price_k:
+            signal = gamb.signal(i,parameter,14)
+            if signal == 1:
+                gamb.buy(i,buy)
+                tab[0]+=1
+            elif signal == 0:
+                gamb.sell(i,sell)
+                tab[2] += 1
+            else:
+                tab[1] += 1
+            #print(gamb.checkmoni())
+        gamb.sellall(i)
+        sl_zas[n_] = (gamb.checkmoni()[1],tab)
+        #print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
+    sl_n[(buy, sell)] = sl_zas
+# ta sl_n bi rd shranjevou na en file
+
 """
 for i in long_per:
     for n in short_per:
         tab_komb.append((n,i))
 print(tab_komb)
 """
-#OD TUKI NAPREJ LOH POZENS
+"""
+#OD TUKI NAPREJ LOH POZENS ZA PROBO
 startmoneh = 10000
 gamb = Gambler(kovanc,startmoneh,12,26)
 tab = [0,0,0]
 parameter = 400
 buy = startmoneh*0.05
 sell = startmoneh*0.03
-"""
+
 for i in price_k:
     signal = gamb.signal(i,parameter,14)
     if signal == 1:
@@ -152,25 +193,9 @@ print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
 print(tab)
 #nucam se mby stop-loss in take-profit
 """
-"""
-#1.kup/prodej
-todo = []
-for do in range(10):
-    b = random.random()
-    s = random.random()
-    todo.append((b,b))
-    todo.append((s,s))
-    todo.append((b,s))
-print(todo)
 
-#2.N
 
-ns = [14]
-for nek_n in range(9):
-    n = random.randrange(1,100)
-    ns.append(n)
-print(ns)
-"""
+
 #3.parameter odvisn od kovanca
 
 
