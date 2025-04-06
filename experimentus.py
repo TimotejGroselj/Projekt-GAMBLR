@@ -36,7 +36,6 @@ class Gambler:
             return 'Failed'
         self.repozitorij += buywith/self.prices[datum]
         self.dinarcki -= buywith
-        return 'Succeeded'
 
     def sell(self,datum,sellwith):
         """
@@ -48,7 +47,14 @@ class Gambler:
             return 'Failed'
         self.dinarcki += sellwith
         self.repozitorij -= sellwith/self.prices[datum]
-        return 'Succeeded'
+
+    def sellall(self,datum):
+        """
+        :param datum: na kateri datum bomo izplačali
+        :return:
+        """
+        self.dinarcki += self.repozitorij*self.prices[datum]
+        self.repozitorij -= self.repozitorij
 
     def rsi_yes(self,datum,N=14): #TESTIRANO
         """Indicira a je market oversold, overbought al pa None"""
@@ -92,17 +98,16 @@ class Gambler:
             return 0.5
         return 0
 
-    def startgambling(self,datum,parameter):
+    def signal(self,datum,parameter,N):
         """Presodi ali bi na dano ceno prodal,kupil al pa holdou"""
-        aprovals = [self.ema_sma(datum),self.rsi_yes(datum,14),self.ema_cross(datum,parameter)]
+        aprovals = [self.ema_sma(datum),self.rsi_yes(datum,N),self.ema_cross(datum,parameter)]
         s_pik = sum(aprovals)
         if 3 >= s_pik >= 2.5:
-            return 'Buy'
-        elif 2 >= s_pik >= 1.5:
-            if aprovals[2] == 1:
-                return 'Buy'
-            return 'Hold'
-        return 'Sell'
+            return 1 #'Buy'
+        if 2 >= s_pik >= 1:
+            return 0.5 #'Hold'
+        else:
+            return 0 #'Sell'
 
 
 
@@ -123,8 +128,29 @@ for i in long_per:
         tab_komb.append((n,i))
 print(tab_komb)
 """
-gamb = Gambler(kovanc,10000,12,26)
-#nucam se kok hocm kupt/prodt, mby stop-loss in take-profit
+#OD TUKI NAPREJ LOH POZENS
+startmoneh = 10000
+gamb = Gambler(kovanc,startmoneh,12,26)
+tab = [0,0,0]
+parameter = 400
+buy = startmoneh*0.05
+sell = startmoneh*0.03
+for i in price_k:
+    signal = gamb.signal(i,parameter,14)
+    if signal == 1:
+        gamb.buy(i,buy)
+        tab[0]+=1
+    elif signal == 0:
+        gamb.sell(i,sell)
+        tab[2] += 1
+    else:
+        tab[1] += 1
+    print(gamb.checkmoni())
+gamb.sellall(i)
+print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
+print(tab)
+#nucam se mby stop-loss in take-profit
+
 
 """
 mozne = {}
