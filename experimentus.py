@@ -1,4 +1,4 @@
-
+import random
 from classdat import coin
 import pickle as kumarca
 from ema import EMA
@@ -135,6 +135,7 @@ tab = [0,0,0]
 parameter = 400
 buy = startmoneh*0.05
 sell = startmoneh*0.03
+"""
 for i in price_k:
     signal = gamb.signal(i,parameter,14)
     if signal == 1:
@@ -150,14 +151,30 @@ gamb.sellall(i)
 print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
 print(tab)
 #nucam se mby stop-loss in take-profit
+"""
+"""
+#1.kup/prodej
+todo = []
+for do in range(10):
+    b = random.random()
+    s = random.random()
+    todo.append((b,b))
+    todo.append((s,s))
+    todo.append((b,s))
+print(todo)
+
+#2.N
+
+ns = [14]
+for nek_n in range(9):
+    n = random.randrange(1,100)
+    ns.append(n)
+print(ns)
+"""
+#3.parameter odvisn od kovanca
 
 
-"""
-mozne = {}
-for i in tab_komb:
-    mozne[i] = 0
-    begin = Gambler(kovanc,start_dinarck,i[0],i[1])
-    for datum,price in price_k.items():
-        chosament = begin.startgambling(datum,300)
-"""
+#4.long/short
+
+
 
