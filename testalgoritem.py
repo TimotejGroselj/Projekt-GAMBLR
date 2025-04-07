@@ -62,7 +62,7 @@ class EMA_bot(bot):
 
         le_god=dict()
         for key in date_range[1:]:
-            le_god[key]=(ema[yesterday]-ema[key])*self.kdm
+            le_god[key]=(ema[yesterday(key)]-ema[key])*self.kdm
             
         return le_god
     
@@ -72,7 +72,7 @@ class EMA_bot(bot):
         """
         how_much_coin=0
         #very much to do sam mam dost basicly nekak morva vedt kuk coina mava de veva u kuk dnarja se nama investicije prevedejo
-        for key,val in self.calculato_faze(do_dneva,coin_id):
+        for key,val in self.calculato_faze(do_dneva,coin_id).items():
             if val>god_param_invest:
                 kok_dnarja=(val-god_param_invest)*self.km*self.delaunmone
                 self.invest(key,-kok_dnarja)
@@ -83,14 +83,13 @@ class EMA_bot(bot):
                 kok_dnarja=kok_coina*self.cene[coin_id].getprices()[key]
                 self.invest(key,kok_dnarja)
                 how_much_coin+=kok_coina
-            if how_much_coin<0:
-                how_much_coin=0
+
     def simulato(self,god_param_invest,god_param_dropout):
         """
         simulira delovanje eme za eno leto za vse coine
         """
         result=dict()
-        for coin_obj in self.cene:
+        for coin_obj in self.cene.values():
             coin_id=coin_obj.getname()
             for datum in self.dates:
                 self.decision_maker(god_param_invest,god_param_dropout,datum,coin_id)
@@ -102,7 +101,21 @@ class EMA_bot(bot):
 
 with open("data.bin","rb") as data:
     coin_prices=pickle.load(data) 
-trainer=EMA_bot(coin_prices,0.2,1,20) 
-print(trainer.simulato(0,0))
+    pizda=dict()
+    for km in [x / 10 for x in range(2,10)]:
+        for kdm in [x / 10 for x in range(2,10)]:
+            for god_invest in [x / 10 for x in range(2,10)]:
+                for god_dropout in[x / 10 for x in range(2,10)]:
+                    trainer=EMA_bot(coin_prices,km,kdm,20) 
+                    result=trainer.simulato(god_invest,god_dropout)
+                    sume=0
+                    for val in result.values():
+                        sume+=val["mone"]
+                    pizda[f"km={km},kdm={kdm},god_invest={god_invest},god_dropout={god_dropout}"]=sume
+                    print(pizda)
+    print(pizda)
+    print(max(pizda.values()))
+
+
 
         
