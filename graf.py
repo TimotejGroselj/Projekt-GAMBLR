@@ -5,7 +5,6 @@ from ema import EMA
 from rsi import RSI
 from sma import SMA
 from pathlib import Path
-
 import pickle
 from classdat import coin
 with open("data.bin","rb") as data:
@@ -14,7 +13,7 @@ with open("data.bin","rb") as data:
     for obj_coin in coin_prices.values():
         d=len(obj_coin.getprices())
         break
-    
+    #dobimo število dnevov za katere imamo podatke
     Path("EMAS").mkdir(parents=True, exist_ok=True)
     for coin_id in coin_prices.keys():
         fig=plt.figure(figsize=[19.2,10.8])
@@ -53,11 +52,12 @@ with open("data.bin","rb") as data:
         plt.legend()
         fig.savefig(f"SMAS\\SMAS for {coin_id}.pdf",bbox_inches="tight")
         plt.close()
-
-    fig,axs=plt.subplots(2,2,figsize=[19.2,10.8])
-
-
-        
+        #ustvarimo grafe vrednosti EM,RSI in SMA za vsak coin, kjer se sprehajamo po pogosto uporabljenih N da vidimo če sovpadajo s podatki.
+        #vsak coin je na svojem grafu zaradi preglednosti
+        #vsaka metoda ima grafe za vse coine v po metodi imenovanem direktoriju
+        #graf cene za coin ni vključen ker tudi z semilogy dobimo nepregledne grafe
+    
+    fig,axs=plt.subplots(2,2,figsize=[19.2,10.8])    
     for obj_coin in coin_prices.values():
         axs[0][0].semilogy(list(obj_coin.getprices().keys()),list(obj_coin.getprices().values()),linewidth =2)
         axs[0][0].set_xticks([list(obj_coin.getprices().keys())[i] for i in range(0,d,floor(d/6))])
@@ -77,7 +77,7 @@ with open("data.bin","rb") as data:
     axs[1][0].set_xlabel("date")
     axs[1][0].set_ylabel("total volume")
     axs[1][0].set_title("Total volumes")
-
+    #ustvarimo 3 grafe za začetne podatke, za občutek kako zgledajo vrednosti
     for obj_coin in coin_prices.values():
         axs[1][1].plot(0,0,label=obj_coin.getname(),linewidth =2)
     axs[1][1].set_title("Legend")
@@ -86,3 +86,4 @@ with open("data.bin","rb") as data:
     fig.savefig(f"starting_data.pdf",bbox_inches="tight")
     plt.show()
     plt.close()
+    #ker je liho subplotov in malo prostora na zgornjih treh grafih je na zadnjem subplotu samo legenda
