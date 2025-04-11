@@ -148,6 +148,7 @@ class Gambler:
         tale 100 je absolutno spremenit to je param za emo
         """
         return SMA(1,datum).getTodaySMA(self.coin,datum)/100
+    #please help tko cela ta fn bi blo dobr de se neki dobrga spomneva sam nimam pojma tko de hjelppp
 """
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 

@@ -10,11 +10,13 @@ def simulato(coin_obj,mone=10000):
     """
     name=coin_obj.getname()
     gamb = Gambler(name,mone,12,26)
+    #help with parameter
     one_coin = coin_obj.getprices()
     states=dict()
     for date in one_coin:
         parameter=gamb.set_param(date)
         signal = gamb.signal(date,parameter,14)
+        #hjelp with parameter
         #nastavimo vrednosti, ki bojo odločale ali bomo kupovali ali ne s pomočjo gamblr classa
         if signal == 1:
             buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(date))
