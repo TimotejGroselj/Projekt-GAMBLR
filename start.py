@@ -19,7 +19,10 @@ with open(f"data.bin","wb") as data:
         time.sleep(15)
         url=f"https://api.coingecko.com/api/v3/coins/{el['id']}/market_chart?vs_currency=usd&days=364"
         response=requests.get(url)
-        print(response)
+        if response.status_code==200:
+            print("Still working...")
+        else:
+            raise Exception("Call didnt work. Try again.")
         coin_prices[el["id"]]=coin(response.json(),el["id"])
     pickle.dump(coin_prices,data)
 

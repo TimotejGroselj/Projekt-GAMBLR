@@ -108,8 +108,35 @@ class Gambler:
             return 0.5 #'Hold'
         else:
             return 0 #'Sell'
-
-
+    def set_max(self,datum):
+        max=-1
+        for key in sorted(self.prices.keys()):
+            if key==datum:
+                break
+            if self.prices[key]>=max:
+                max=self.prices[key]
+        return max
+    def set_min(self,datum):
+        min=float("Inf")
+        for key in sorted(self.prices.keys()):
+            if key==datum:
+                break
+            if self.prices[key]<=min:
+                min=self.prices[key]
+        return min
+    def set_buy_sell(self,datum):
+        """
+        vrne številko na intervalu [-1,1], ki nam predstavlja kako daleč od neke srednje vrednostni smo v % glede na maximalno in minimalno ceno, ki smo jo dosegli do zdaj
+        return -1 => smo pri min ceni
+        return 1 => smo pri max ceni
+        return 0 => smo pri sredinski ceni
+        """
+        maxi=self.set_max(datum)
+        mini=self.set_min(datum)
+        if mini==maxi:
+            return 0
+        delta=self.prices[datum]-mini
+        return 2(delta/(maxi-mini))-1
 
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
@@ -123,7 +150,7 @@ startmoneh = 10000
 
 #I HOPE THIS DOES THA MACHINUS LERNUS
 #Edin rd bi shranjevou na en file (pickle perhaps??)
-todo = []
+"""todo = []
 for do in range(3):  # 1.kup/prodej
     b = random.random()
     s = random.random()
@@ -162,11 +189,12 @@ for buy,sell in todo:
     sl_n[(buy, sell)] = sl_zas
 # ta sl_n bi rd shranjevou na en file
 
-"""
+
 for i in long_per:
     for n in short_per:
         tab_komb.append((n,i))
 print(tab_komb)
+"""
 """
 """
 #OD TUKI NAPREJ LOH POZENS ZA PROBO
@@ -192,7 +220,7 @@ gamb.sellall(i)
 print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
 print(tab)
 #nucam se mby stop-loss in take-profit
-"""
+
 
 
 

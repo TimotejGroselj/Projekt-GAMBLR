@@ -15,10 +15,10 @@ class coin():
         #razpakira vrednosti
         data=[dict(),dict(),dict()]
         for i in range(len(data_[0])):
-            lep_datum=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d")
+            nice_date=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d")
             #zapiše datum v std obliko za projekt
             for j in range(3):
-                data[j][lep_datum]=data_[j][i][1]
+                data[j][nice_date]=data_[j][i][1]
         [self.prices,self.market_caps,self.total_volumes]=data
         #iz slovarja kjer so vrednosti pari ustvarimo 3 slovarje za cene market caps in total volumne
         
