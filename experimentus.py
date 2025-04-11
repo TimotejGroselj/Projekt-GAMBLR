@@ -109,6 +109,9 @@ class Gambler:
         else:
             return 0 #'Sell'
     def set_max(self,datum):
+        """
+        max cena do datuma
+        """
         max=-1
         for key in sorted(self.prices.keys()):
             if key==datum:
@@ -117,6 +120,9 @@ class Gambler:
                 max=self.prices[key]
         return max
     def set_min(self,datum):
+        """
+        min cena do datuma
+        """
         min=float("Inf")
         for key in sorted(self.prices.keys()):
             if key==datum:
@@ -137,7 +143,12 @@ class Gambler:
             return 0
         delta=self.prices[datum]-mini
         return 2*(delta/(maxi-mini))-1
-
+    def set_param(self,datum):
+        """
+        tale 100 je absolutno spremenit to je param za emo
+        """
+        return SMA(1,datum).getTodaySMA(self.coin,datum)/100
+"""
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
 with open("data.bin", "rb") as data:
@@ -150,7 +161,7 @@ startmoneh = 10000
 
 #I HOPE THIS DOES THA MACHINUS LERNUS
 #Edin rd bi shranjevou na en file (pickle perhaps??)
-"""
+
 todo = []
 for do in range(3):  # 1.kup/prodej
     b = random.random()
@@ -195,12 +206,11 @@ for i in long_per:
     for n in short_per:
         tab_komb.append((n,i))
 print(tab_komb)
-"""
-"""
-"""
-#OD TUKI NAPREJ LOH POZENS ZA PROBO
 
 """
+#OD TUKI NAPREJ LOH POZENS ZA PROBO
+"""
+
 startmoneh = 10000
 gamb = Gambler(kovanc,startmoneh,12,26)
 tab = [0,0,0]
@@ -223,13 +233,17 @@ gamb.sellall(i)
 print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
 print(tab)
 #nucam se mby stop-loss in take-profit
+
+"""
+#tuki naprej sm jst uporabu nove stvari in delajo
 """
 startmoneh = 10000
 gamb = Gambler(kovanc,startmoneh,12,26)
 tab = [0,0,0]
-parameter = 400
+
 
 for i in price_k:
+    parameter=gamb.set_param(i)
     signal = gamb.signal(i,parameter,14)
     if signal == 1:
         buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
@@ -251,6 +265,6 @@ print(tab)
 
 
 #4.long/short
-
+"""
 
 
