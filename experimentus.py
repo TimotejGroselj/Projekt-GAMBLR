@@ -136,7 +136,7 @@ class Gambler:
         if mini==maxi:
             return 0
         delta=self.prices[datum]-mini
-        return 2(delta/(maxi-mini))-1
+        return 2*(delta/(maxi-mini))-1
 
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
@@ -150,7 +150,8 @@ startmoneh = 10000
 
 #I HOPE THIS DOES THA MACHINUS LERNUS
 #Edin rd bi shranjevou na en file (pickle perhaps??)
-"""todo = []
+"""
+todo = []
 for do in range(3):  # 1.kup/prodej
     b = random.random()
     s = random.random()
@@ -198,6 +199,8 @@ print(tab_komb)
 """
 """
 #OD TUKI NAPREJ LOH POZENS ZA PROBO
+
+"""
 startmoneh = 10000
 gamb = Gambler(kovanc,startmoneh,12,26)
 tab = [0,0,0]
@@ -220,8 +223,28 @@ gamb.sellall(i)
 print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
 print(tab)
 #nucam se mby stop-loss in take-profit
+"""
+startmoneh = 10000
+gamb = Gambler(kovanc,startmoneh,12,26)
+tab = [0,0,0]
+parameter = 400
 
-
+for i in price_k:
+    signal = gamb.signal(i,parameter,14)
+    if signal == 1:
+        buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
+        gamb.buy(i,buy)
+        tab[0]+=1
+    elif signal == 0:
+        sell=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
+        gamb.sell(i,sell)
+        tab[2] += 1
+    else:
+        tab[1] += 1
+    print(gamb.checkmoni())
+gamb.sellall(i)
+print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
+print(tab)
 
 
 #3.parameter odvisn od kovanca
