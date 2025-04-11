@@ -4,7 +4,7 @@
 -zafukat simulacijo v funkcijo v gamblr
 -zrisat grafe za said simulacije (kok dnarja v coinu(trenutno),price coina na dan na y os na x os datumi)
 -narisat stolpicni diagram kjer max profit stolpec uzadi sprednji pa kuk midva skuhava profita za dan coin
--povprecn procent profita k ga generirava glede na max profit za vsak coin
+-povprecn procent profita k ga generirava glede na invested mones za vsak coin
 -GAMBLE
 
 -links
