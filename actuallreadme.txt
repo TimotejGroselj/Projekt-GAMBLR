@@ -1,14 +1,11 @@
--graf za cene najbl popularnih coinov 
--marketcap graf popularnih
--maxsupply/current supply
--RSI Relative Strength Index (wikipedia and calculato)
--EMA Exponential Moving Average (google and calculato)
--SMA std Moving Average
+-vse spremenjlivke u engl komentarje pstiva namir treba uprasat na predavanjih (timo done)
+-definirat max in min v gamblr (done)
+-parametizirat ceno da dobiva % buy/sell (done)
+-zafukat simulacijo v funkcijo v gamblr (glede na to kako je use spisan kinda ne more v class tko de bom spisu u svoji fn uzuni) (zdj je to done sam nuca upgrades from your research)
+-zrisat grafe za said simulacije (kok dnarja v coinu(trenutno),price coina na dan na y os na x os datumi) (done)
+-narisat stolpicni diagram kjer max profit stolpec uzadi sprednji pa kuk midva skuhava profita za dan coin
+-povprecn procent profita k ga generirava glede na invested mones za vsak coin
 -GAMBLE
--Basicly analiza algoritmov za prevdivdevanja marketa na dani cryptovaluti
--fuklneva algoritem of chopice čez en coin in vidva kdaj bi algoritem reku da nej kupva ali prodava.
--to nrdiva za vse algoritme in več coinu
--MASIVE ANALIZA TIME (std odklon,avg profit glede na max profit (v%))
 
 -links
 https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=364
