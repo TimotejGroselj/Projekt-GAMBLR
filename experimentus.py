@@ -5,7 +5,7 @@ from ema import EMA
 from rsi import RSI
 from sma import SMA
 from last_day import yesterday
-
+import matplotlib.pyplot as plt
 
 class Gambler:
     def __init__(self,coin:str,dinarcki:float,shortN,longN,repozitorij=0):
@@ -108,28 +108,21 @@ class Gambler:
             return 0.5 #'Hold'
         else:
             return 0 #'Sell'
-    def set_max(self,datum):
+    def set_max_min(self,datum):
         """
-        max cena do datuma
+        max cena do datuma in min cena do datuma
         """
         max=-1
+        min = float("Inf")
         for key in sorted(self.prices.keys()):
             if key==datum:
                 break
             if self.prices[key]>=max:
                 max=self.prices[key]
-        return max
-    def set_min(self,datum):
-        """
-        min cena do datuma
-        """
-        min=float("Inf")
-        for key in sorted(self.prices.keys()):
-            if key==datum:
-                break
             if self.prices[key]<=min:
                 min=self.prices[key]
-        return min
+        return max,min
+
     def set_buy_sell(self,datum):
         """
         vrne številko na intervalu [-1,1], ki nam predstavlja kako daleč od neke srednje vrednostni smo v % glede na maximalno in minimalno ceno, ki smo jo dosegli do zdaj
@@ -137,135 +130,64 @@ class Gambler:
         return 1 => smo pri max ceni
         return 0 => smo pri sredinski ceni
         """
-        maxi=self.set_max(datum)
-        mini=self.set_min(datum)
+        mami = self.set_max_min(datum)
+        maxi=mami[0]
+        mini=mami[1]
         if mini==maxi:
             return 0
         delta=self.prices[datum]-mini
         return 2*(delta/(maxi-mini))-1
-    def set_param(self,datum):
+    def set_param(self,datum,N):
         """
-        tale 100 je absolutno spremenit to je param za emo
+        ustvari parameter glede na kovanec
         """
-        return SMA(1,datum).getTodaySMA(self.coin,datum)/100
-    #please help tko cela ta fn bi blo dobr de se neki dobrga spomneva sam nimam pojma tko de hjelppp
-"""
+        return SMA(N,datum).getTodaySMA(self.coin,datum)
+
+
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
 with open("data.bin", "rb") as data:
     coin_price = kumarca.load(data)
 kovanc = "bitcoin"
 price_k = coin_price[kovanc].getprices()
-parameter = 400 #odvisn od kovanca
 tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)] #long_per = [21, 26, 50] #short_per = [9, 12, 14]
-startmoneh = 10000
-
-#I HOPE THIS DOES THA MACHINUS LERNUS
-#Edin rd bi shranjevou na en file (pickle perhaps??)
-
-todo = []
-for do in range(3):  # 1.kup/prodej
-    b = random.random()
-    s = random.random()
-    todo.append((b,s))
-    todo.append((s,s))
-    todo.append((b,b))
-todo.append((b,s))
-
-ns = [14] #2.N
-for nek_n in range(9):
-    n = random.randrange(1,100)
-    ns.append(n)
-
-for buy,sell in todo:
-    sl_n = {}
-    buy *= startmoneh
-    sell *= startmoneh
-    for n_ in ns:
-        gamb = Gambler(kovanc, startmoneh, 12, 26)
-        tab = [0,0,0]
-        sl_zas = {}
-        for i in price_k:
-            signal = gamb.signal(i,parameter,14)
-            if signal == 1:
-                gamb.buy(i,buy)
-                tab[0]+=1
-            elif signal == 0:
-                gamb.sell(i,sell)
-                tab[2] += 1
-            else:
-                tab[1] += 1
-            #print(gamb.checkmoni())
-        gamb.sellall(i)
-        sl_zas[n_] = (gamb.checkmoni()[1],tab)
-        #print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
-    sl_n[(buy, sell)] = sl_zas
-# ta sl_n bi rd shranjevou na en file
-
-
-for i in long_per:
-    for n in short_per:
-        tab_komb.append((n,i))
-print(tab_komb)
-
-"""
-#OD TUKI NAPREJ LOH POZENS ZA PROBO
-"""
-
-startmoneh = 10000
-gamb = Gambler(kovanc,startmoneh,12,26)
-tab = [0,0,0]
-parameter = 400
-buy = startmoneh*0.05
-sell = startmoneh*0.03
-
-for i in price_k:
-    signal = gamb.signal(i,parameter,14)
-    if signal == 1:
-        gamb.buy(i,buy)
-        tab[0]+=1
-    elif signal == 0:
-        gamb.sell(i,sell)
-        tab[2] += 1
-    else:
-        tab[1] += 1
-    print(gamb.checkmoni())
-gamb.sellall(i)
-print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
-print(tab)
-#nucam se mby stop-loss in take-profit
-
-"""
+#tab_komb = [(9, 21),(9, 26),(9, 50)]
+#best combos rsi #14 [(9, 21),(9, 26),(9, 50)],5 [(9,50),(14,50),(12,50)] use 5 or 14
 #tuki naprej sm jst uporabu nove stvari in delajo
+
 """
-startmoneh = 10000
-gamb = Gambler(kovanc,startmoneh,12,26)
-tab = [0,0,0]
+#(0.0, 17064.96600467658) [31, 286, 47]
+for short,long in [(9,21)]:
+    startmoneh = 10000
+    gamb = Gambler(kovanc,startmoneh,short,long)
+    tab = [0,0,0]
+    for i in price_k:
+        parameter=gamb.set_param(i,9)
+        signal = gamb.signal(i,parameter,14)
+        if signal == 1:
+            buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
+            gamb.buy(i,buy)
+            tab[0]+=1
+        elif signal == 0:
+            sell=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
+            gamb.sell(i,sell)
+            tab[2] += 1
+        else:
+            tab[1] += 1
+        #print(gamb.checkmoni())
+    gamb.sellall(i)
+    print(gamb.checkmoni(),tab) #drugi parameter ti pove kok mas se v $
 
 
-for i in price_k:
-    parameter=gamb.set_param(i)
-    signal = gamb.signal(i,parameter,14)
-    if signal == 1:
-        buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
-        gamb.buy(i,buy)
-        tab[0]+=1
-    elif signal == 0:
-        sell=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
-        gamb.sell(i,sell)
-        tab[2] += 1
-    else:
-        tab[1] += 1
-    print(gamb.checkmoni())
-gamb.sellall(i)
-print(gamb.checkmoni()) #drugi parameter ti pove kok mas se v $
-print(tab)
+tole sm zbrisu k je ne rabva (zdruzu sm jo z set_max)
+    def set_min(self,datum):
+        #min cena do datuma
+        min=float("Inf")
+        for key in sorted(self.prices.keys()):
+            if key==datum:
+                break
+            if self.prices[key]<=min:
+                min=self.prices[key]
+        return min
 
-
-#3.parameter odvisn od kovanca
-
-
-#4.long/short
 """
-
-
