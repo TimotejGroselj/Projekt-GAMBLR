@@ -3,7 +3,7 @@
 -parametizirat ceno da dobiva % buy/sell (done)
 -zafukat simulacijo v funkcijo v gamblr (glede na to kako je use spisan kinda ne more v class tko de bom spisu u svoji fn uzuni) (zdj je to done sam nuca upgrades from your research)
 -zrisat grafe za said simulacije (kok dnarja v coinu(trenutno),price coina na dan na y os na x os datumi) (done)
--narisat stolpicni diagram kjer max profit stolpec uzadi sprednji pa kuk midva skuhava profita za dan coin
+-narisat stolpicni diagram kjer max profit stolpec uzadi sprednji pa kuk midva skuhava profita za dan coin (kinda done)
 -povprecn procent profita k ga generirava glede na invested mones za vsak coin
 -GAMBLE
 
