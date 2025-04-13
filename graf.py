@@ -97,6 +97,9 @@ if decider=="":
 decider=input("Hočeš simulirati trading bota za vse coine ali videti najnovejšo do zdaj simulirano simulacijo? (Posodobi:press enter,Staro:kr kol druzga): ")
 if decider=="":
     from simulato import coini as results
+else:
+    with open("results.bin","rb") as data:
+        results=pickle.load(data)
     Path("findings").mkdir(parents=True, exist_ok=True)
     for name,numbers in results.items():
         fig=plt.figure(figsize=[19.2,10.8])
@@ -110,19 +113,5 @@ if decider=="":
         plt.legend()
         fig.savefig(f"findings\\{name}.pdf",bbox_inches="tight")
         plt.close()       
-else:
-    with open("results.bin","rb") as data:
-        results=pickle.load(data)
-    for name,numbers in results.items():
-        fig=plt.figure(figsize=[19.2,10.8])
-        coin_obj=coin_prices[name]
-        plt.semilogy(list(coin_obj.getprices().keys()),list(coin_obj.getprices().values()),label=f"cena coina")
-        plt.semilogy(list(numbers.keys()),[el[0] for el in numbers.values()],label=f"št coina")
-        plt.semilogy(list(numbers.keys()),[el[1] for el in numbers.values()],label=f"actuall mone")
-        plt.xticks([list(numbers.keys())[i] for i in range(0,d,floor(d/6))])
-        plt.xlabel("date")
-        plt.title(name)
-        plt.legend()
-        fig.savefig(f"findings\\{name}.pdf",bbox_inches="tight")
-        plt.close()       
+  
     

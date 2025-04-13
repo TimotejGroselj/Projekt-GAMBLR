@@ -34,7 +34,10 @@ class RSI:
                 kovanc,prices = i.getname(),i.getprices()
                 prices = dict(reversed(prices.items()))
                 tab = list(prices.values())
-                id = list(prices).index(dat)
+                if dat in list(prices):
+                    id = list(prices).index(dat)
+                else:
+                    raise Exception("Podatki niso posodobljeni. Poženi start.py")
                 dolz, ost = len(tab), len(prices) % N
                 pomozn = {}
                 for i,datum in enumerate(prices):
