@@ -108,6 +108,7 @@ class Gambler:
             return 0.5 #'Hold'
         else:
             return 0 #'Sell'
+
     def set_max_min(self,datum):
         """
         max cena do datuma in min cena do datuma
@@ -137,18 +138,22 @@ class Gambler:
             return 0
         delta=self.prices[datum]-mini
         return 2*(delta/(maxi-mini))-1
-    def set_param(self,datum,N):
-        """
-        ustvari parameter glede na kovanec
-        """
-        return SMA(N,datum).getTodaySMA(self.coin,datum)
 
+    def standard_deviation_ish(self,datum):
+        povp = SMA(14, datum).getTodaySMA(self.coin, datum)
+        vsota = 0
+        for i,date in enumerate(self.prices):
+            vsota += abs(self.prices[date] - povp)
+            if date == datum:break
+        return (vsota/(i+1))
 
 tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
 
 with open("data.bin", "rb") as data:
     coin_price = kumarca.load(data)
-kovanc = "bitcoin"
+kovanc = "solana"
+
+
 price_k = coin_price[kovanc].getprices()
 tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)] #long_per = [21, 26, 50] #short_per = [9, 12, 14]
 #tab_komb = [(9, 21),(9, 26),(9, 50)]
@@ -156,13 +161,12 @@ tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (
 #tuki naprej sm jst uporabu nove stvari in delajo
 
 """
-#(0.0, 17064.96600467658) [31, 286, 47]
 for short,long in [(9,21)]:
     startmoneh = 10000
     gamb = Gambler(kovanc,startmoneh,short,long)
     tab = [0,0,0]
     for i in price_k:
-        parameter=gamb.set_param(i,9)
+        parameter = gamb.standard_deviation_ish(i)
         signal = gamb.signal(i,parameter,14)
         if signal == 1:
             buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(i))
@@ -174,20 +178,17 @@ for short,long in [(9,21)]:
             tab[2] += 1
         else:
             tab[1] += 1
-        #print(gamb.checkmoni())
     gamb.sellall(i)
-    print(gamb.checkmoni(),tab) #drugi parameter ti pove kok mas se v $
-
-
-tole sm zbrisu k je ne rabva (zdruzu sm jo z set_max)
-    def set_min(self,datum):
-        #min cena do datuma
-        min=float("Inf")
-        for key in sorted(self.prices.keys()):
-            if key==datum:
-                break
-            if self.prices[key]<=min:
-                min=self.prices[key]
-        return min
-
+    print(gamb.checkmoni(),tab,short,long) #drugi parameter ti pove kok mas se v $
 """
+best_moni = {'bitcoin': (17304.385583417188, (9, 50)),
+             'ethereum': (6695.341925051774, (12, 50)),
+             'tether': (10010.789543453964, (14, 50)),
+             'ripple': (31538.02492690881, (9, 50)),
+             'binancecoin': (10051.823200701618, (9, 50)),
+             'solana': (15897.01064578032, (9, 50)),
+             'usd-coin': (10000.34919653982, (9, 21)),
+             'dogecoin': (12374.218810026, (9, 21)),
+             'cardano': (14487.853027886042, (9, 21)),
+             'tron': (17411.715821141595, (9, 50))}
+short_long_tab = [(9,50),(12,50),(14,50),(9,50),(9,50),(9,50),(9,21),(9,21),(9,21),(9,50)]
