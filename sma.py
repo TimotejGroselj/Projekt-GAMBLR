@@ -1,7 +1,8 @@
 from classdat import coin
 from datetime import date
 import pickle as kumarca
-
+import time
+import subprocess
 
 class SMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
@@ -16,10 +17,14 @@ class SMA:
                 kovanc, prices = i.getname(), i.getprices()
                 prices = dict(reversed(prices.items()))
                 tab = list(prices.values())
-                if dat in list(prices):
-                    id = list(prices).index(dat)
-                else:
-                    raise Exception("Podatki niso posodobljeni. Poženi start.py")
+                if dat not in list(prices):
+                    print("Podatki niso posodobljeni!")
+                    time.sleep(2)
+                    print("Začenjam s posodobitvijo.")
+                    subprocess.run(["python", 'start.py'])
+                    print("Nadaljujem s programom.")
+                    time.sleep(2)
+                id = list(prices).index(dat)
                 dolz,ost = len(tab),len(prices)%N
                 pomozn = {}
                 for i, datum in enumerate(prices):

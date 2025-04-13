@@ -2,6 +2,8 @@
 from classdat import coin
 from datetime import date
 import pickle as kumarca
+import time
+import subprocess
 
 class EMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d"),smoothing=2):
@@ -15,6 +17,13 @@ class EMA:
                 kovanc,prices = i.getname(),i.getprices()
                 EMAp = 0
                 pomozn = {}
+                if dat not in list(prices):
+                    print("Podatki niso posodobljeni!")
+                    time.sleep(2)
+                    print("Začenjam s posodobitvijo.")
+                    subprocess.run(["python", 'start.py'])
+                    print("Nadaljujem s programom.")
+                    time.sleep(2)
                 for datum in prices:
                     if EMAp == 0:
                         EMAp = prices[datum]

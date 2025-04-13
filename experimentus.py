@@ -1,11 +1,11 @@
-import random
+
 from classdat import coin
 import pickle as kumarca
 from ema import EMA
 from rsi import RSI
 from sma import SMA
 from last_day import yesterday
-import matplotlib.pyplot as plt
+
 
 class Gambler:
     def __init__(self,coin:str,dinarcki:float,shortN,longN,repozitorij=0):
@@ -151,7 +151,7 @@ tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0
 
 with open("data.bin", "rb") as data:
     coin_price = kumarca.load(data)
-kovanc = "solana"
+kovanc = "ripple"
 
 
 price_k = coin_price[kovanc].getprices()
@@ -160,8 +160,8 @@ tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (
 #best combos rsi #14 [(9, 21),(9, 26),(9, 50)],5 [(9,50),(14,50),(12,50)] use 5 or 14
 #tuki naprej sm jst uporabu nove stvari in delajo
 
-"""
-for short,long in [(9,21)]:
+
+for short,long in [(9,50)]:
     startmoneh = 10000
     gamb = Gambler(kovanc,startmoneh,short,long)
     tab = [0,0,0]
@@ -180,7 +180,7 @@ for short,long in [(9,21)]:
             tab[1] += 1
     gamb.sellall(i)
     print(gamb.checkmoni(),tab,short,long) #drugi parameter ti pove kok mas se v $
-"""
+
 best_moni = {'bitcoin': (17304.385583417188, (9, 50)),
              'ethereum': (6695.341925051774, (12, 50)),
              'tether': (10010.789543453964, (14, 50)),
