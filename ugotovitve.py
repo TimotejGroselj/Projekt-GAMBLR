@@ -26,13 +26,13 @@ for name,numbers in coini_profit.items():
     proc_prof.append(prof[-1]/numbers[sorted(numbers.keys())[0]][1])
     print(f"Profit pri {name}: {prof[-1]}")
     
-    plt.text(-0.2+št*1,prof_max[-1],"Največji\nmožen\nprofit")
-    plt.text(-0.2+št*1,prof[-1],"Profit\nnajnega\nbota")
+    plt.text(-0.3+št*1,prof_max[-1]+100,f"{round(prof_max[-1],2)}$")
+    plt.text(-0.3+št*1,prof[-1]+100,f"{round(prof[-1],2)}$")
     št+=1
-plt.bar(coini_profit.keys(),prof,zorder=2,edgecolor = 'k')
-plt.bar(coini_profit.keys(),prof_max,edgecolor = 'k')
+plt.bar(coini_profit.keys(),prof,zorder=2,edgecolor = 'k',label="Profiti bota")
+plt.bar(coini_profit.keys(),prof_max,edgecolor = 'k',label="Največji možni profiti")
 plt.plot(coini_profit.keys(),[0 for _ in range(len(coini_profit.keys()))],color="k")
-
+plt.legend()
 plt.xlabel("coin")
 plt.ylabel("profit")
 plt.show()
