@@ -1,7 +1,7 @@
 import pickle
 from experimentus import Gambler
 from classdat import coin
-def simulato(coin_obj,mone=10000):
+def simulato(coin_obj,short,long,mone=10000):
     """
     vzame en objekt coin in vrne vn simulacijo trading bota za ta coin
     to vrne v obliki slovarja z 
@@ -9,11 +9,11 @@ def simulato(coin_obj,mone=10000):
     vrednost=tuple(repozitori,actuall mone)
     """
     name=coin_obj.getname()
-    gamb = Gambler(name,mone,9,21)
+    gamb = Gambler(name,mone,short,long)
     one_coin = coin_obj.getprices()
     states=dict()
     for date in one_coin:
-        parameter=gamb.set_param(date,9)
+        parameter=gamb.standard_deviation_ish(date)
         signal = gamb.signal(date,parameter,14)
         #nastavimo vrednosti, ki bojo odločale ali bomo kupovali ali ne s pomočjo gamblr classa
         if signal == 1:
@@ -32,9 +32,13 @@ def simulato(coin_obj,mone=10000):
 with open("data.bin", "rb") as data:
     coin_prices = pickle.load(data)
 coini=dict()
+short_long_tab = [(9,50),(12,50),(14,50),(9,50),(9,50),(9,50),(9,21),(9,21),(9,21),(9,50)]
+tren = 0
 for obj_coin in coin_prices.values():
-    coini[obj_coin.getname()]=simulato(obj_coin)
+    obdobje = short_long_tab[tren]
+    coini[obj_coin.getname()]=simulato(obj_coin,obdobje[0],obdobje[1])
     print("loading...")
+    tren += 1
     #simuliramo za vsak coin
 with open(f"results.bin","wb") as data:
     pickle.dump(coini,data)
