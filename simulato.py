@@ -1,6 +1,8 @@
+from update import is_updated
 import pickle
 from experimentus import Gambler
 from classdat import coin
+
 def simulato(coin_obj,short,long,mone=10000):
     """
     vzame en objekt coin in vrne vn simulacijo trading bota za ta coin
@@ -17,18 +19,21 @@ def simulato(coin_obj,short,long,mone=10000):
         signal = gamb.signal(date,parameter,14)
         #nastavimo vrednosti, ki bojo odločale ali bomo kupovali ali ne s pomočjo gamblr classa
         if signal == 1:
-            buy=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(date))
+            buy=gamb.check_money()[1]*abs(gamb.set_buy_sell(date))
             gamb.buy(date,buy)
         elif signal == 0:
-            sell=gamb.checkmoni()[1]*abs(gamb.set_buy_sell(date))
+            sell=gamb.check_money()[1]*abs(gamb.set_buy_sell(date))
             gamb.sell(date,sell)
         #glede na signal, trenutno oddaljenostjo od max/min, ki smo jih dosegli do zdaj in še preostali denar se odloči koliko kupimo/prodamo coina
-        states[date]=gamb.checkmoni()
+        states[date]=gamb.check_money()
     gamb.sellall(date)
     #na koncu kar imamo prodamo
-    states[date]=gamb.checkmoni()
+    states[date]=gamb.check_money()
     return states
-            
+
+
+is_updated() #updates data if necessary
+
 with open("data.bin", "rb") as data:
     coin_prices = pickle.load(data)
 coini=dict()
@@ -37,7 +42,7 @@ tren = 0
 for obj_coin in coin_prices.values():
     obdobje = short_long_tab[tren]
     coini[obj_coin.getname()]=simulato(obj_coin,obdobje[0],obdobje[1])
-    print("loading...")
+    print("Loading...")
     tren += 1
     #simuliramo za vsak coin
 with open(f"results.bin","wb") as data:
