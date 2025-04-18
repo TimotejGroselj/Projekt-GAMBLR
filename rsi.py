@@ -1,73 +1,65 @@
 from classdat import coin
 from datetime import date
-import pickle as kumarca
-import time
-import subprocess
+import pickle 
+
 
 class RSI:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
-        def pridobiRSI(sez):
-            """Hidden function: pridobi rsi za time period"""
-            prej = sez[0]
+        """
+        :returns: {every_coin : {every_date:SMA}},where every_date is capped at "dat"
+        :param N: how many days are included in an interval
+        :param dat: to which date it calculates RSI
+        """
+        def getRSI(sez):
+            """Hidden function: get rsi for elements in sez"""
+            previous = sez[0]
             gain, loss = 0, 0
-            dolz = len(sez)
-            for i in range(1, dolz):
-                change = prej - sez[i]
+            length = len(sez)
+            for i in range(1, length):
+                change = previous - sez[i]
                 if change > 0:
                     gain += change
                 else:
                     loss += abs(change)
-                prej = sez[i]
-            gain /= dolz
-            loss /= dolz
+                previous = sez[i]
+            gain /= length
+            loss /= length
             if loss == 0:
                 return 100
             rs = gain / loss
             return 100 - (100 / (1 + rs))
-        """
-        :param N: na podlagi zadnjih N dni (closing days) izračuna RSI
-        :param datum: od katerega datuma nazaj želi izračunat RSI
-        """
         with open("data.bin", "rb") as data:
-            coin_p = kumarca.load(data)
-            slovar_rsi = {}
+            coin_p = pickle.load(data)
+            rsi_dict = {}
             for i in coin_p.values():
-                kovanc,prices = i.getname(),i.getprices()
+                coin,prices = i.getname(),i.getprices()
                 prices = dict(reversed(prices.items()))
                 tab = list(prices.values())
-                if dat not in list(prices):
-                    print("Podatki niso posodobljeni!")
-                    time.sleep(2)
-                    print("Začenjam s posodobitvijo.")
-                    subprocess.run(["python", 'start.py'])
-                    print("Nadaljujem s programom.")
-                    time.sleep(2)
                 id = list(prices).index(dat)
-                dolz, ost = len(tab), len(prices) % N
-                pomozn = {}
-                for i,datum in enumerate(prices):
+                length, ost = len(tab), len(prices) % N
+                extra = {}
+                for i,date in enumerate(prices):
                     if i < id:
                         continue
-                    if i == dolz - ost:
-                        rsi = pridobiRSI(tab[i:])
-                        pomozn[datum] = rsi
+                    if i == length - ost:
+                        rsi = getRSI(tab[i:])
+                        extra[date] = rsi
                         continue
-                    elif i > dolz - ost:
-                        pomozn[datum] = rsi
+                    elif i > length - ost:
+                        extra[date] = rsi
                     else:
-                        rsi = pridobiRSI(tab[i:i + N])
-                        pomozn[datum] = rsi
-                pomozn = dict(reversed(pomozn.items()))
-                slovar_rsi[kovanc] = pomozn
-            self.slovar_rsi = slovar_rsi
+                        rsi = getRSI(tab[i:i + N])
+                        extra[date] = rsi
+                extra = dict(reversed(extra.items()))
+                rsi_dict[coin] = extra
+            self.rsi_dict = rsi_dict
 
     def getcoinRSIs(self,coin):
-        """Vrne RSI do določenega datuma za dani coin"""
-        return self.slovar_rsi[coin]
+        """For a given coin, returns RSI for every date: {date:RSI}"""
+        return self.rsi_dict[coin]
 
     def getTodayRSI(self,coin,date):
-        """Vrne današnji RSI"""
-        return self.slovar_rsi[coin][date]
-
+        """Returns today's RSI for a given coin"""
+        return self.rsi_dict[coin][date]
 
 

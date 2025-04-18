@@ -1,48 +1,43 @@
 
 from classdat import coin
 from datetime import date
-import pickle as kumarca
-import time
-import subprocess
+import pickle 
+
 
 class EMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d"),smoothing=2):
-        """Ustvari slovar,kjer so ključi imena kovancev,
-        vrednosti pa slovarji oblike {datum:cena} za vsak datum"""
+        """
+        :returns: {every_coin : {every_date:EMA}},where every_date is capped at "dat"
+        :param N: how many days are included in an interval
+        :param dat: to which date it calculates EMA
+        :param smoothing: factor, which "adjust" EMA with an actual coin price
+        """
         with open("data.bin","rb") as data:
-            coin_p = kumarca.load(data)
+            coin_p = pickle.load(data)
             alpha = smoothing / (N + 1)
-            slovar_em = {}
+            ema_dict = {}
             for i in coin_p.values():
-                kovanc,prices = i.getname(),i.getprices()
+                coin,prices = i.getname(),i.getprices()
                 EMAp = 0
                 pomozn = {}
-                if dat not in list(prices):
-                    print("Podatki niso posodobljeni!")
-                    time.sleep(2)
-                    print("Začenjam s posodobitvijo.")
-                    subprocess.run(["python", 'start.py'])
-                    print("Nadaljujem s programom.")
-                    time.sleep(2)
-                for datum in prices:
+                for date in prices:
                     if EMAp == 0:
-                        EMAp = prices[datum]
-                    value = prices[datum]
+                        EMAp = prices[date]
+                    value = prices[date]
                     EMAt = alpha * value + (1 - alpha) * EMAp
-                    pomozn[datum] = EMAt
+                    pomozn[date] = EMAt
                     EMAp = EMAt
-                    if datum == dat: break
-                slovar_em[kovanc] = pomozn
-        self.slovar_em = slovar_em
-        self.N = N
+                    if date == dat: break
+                ema_dict[coin] = pomozn
+        self.ema_dict = ema_dict
 
     def getcoinEMAs(self,coin):
-        """Vrne slovar {datum:price} em za dani kovanec"""
-        return self.slovar_em[coin]
+        """For a given coin, returns EMA for every date: {date:EMA}"""
+        return self.ema_dict[coin]
 
-    def getTodayEMA(self,coin,datum):
-        """Vrne dandšnjo emo za dani kovanec"""
-        return self.slovar_em[coin][datum]
+    def getTodayEMA(self,coin,date):
+        """Returns today's EMA for a given coin"""
+        return self.ema_dict[coin][date]
 
 
 

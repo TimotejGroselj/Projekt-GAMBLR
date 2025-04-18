@@ -1,48 +1,41 @@
 from classdat import coin
 from datetime import date
-import pickle as kumarca
-import time
-import subprocess
+import pickle
+
 
 class SMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
         """
-        :param N: na vsake N dni izračuna SMA
-        :param dat: od katerega datuma nazaj želi izračunat SMA
+        :returns: {every_coin : {every_date:SMA}},where every_date is capped at "dat"
+        :param N: how many days are included in an interval
+        :param dat: to which date it calculates SMA
         """
         with open("data.bin", "rb") as data:
-            coin_p = kumarca.load(data)
-            slovar_sma = {}
+            coin_p = pickle.load(data)
+            sma_dict = {}
             for i in coin_p.values():
-                kovanc, prices = i.getname(), i.getprices()
+                coin, prices = i.getname(), i.getprices()
                 prices = dict(reversed(prices.items()))
                 tab = list(prices.values())
-                if dat not in list(prices):
-                    print("Podatki niso posodobljeni!")
-                    time.sleep(2)
-                    print("Začenjam s posodobitvijo.")
-                    subprocess.run(["python", 'start.py'])
-                    print("Nadaljujem s programom.")
-                    time.sleep(2)
                 id = list(prices).index(dat)
-                dolz,ost = len(tab),len(prices)%N
-                pomozn = {}
-                for i, datum in enumerate(prices):
+                length,remainder = len(tab),len(prices)%N
+                extra = {}
+                for i, date in enumerate(prices):
                     if i < id:
                         continue
-                    if i >= dolz - ost:
-                        pomozn[datum] = tab[i]
+                    if i >= length - remainder:
+                        extra[date] = tab[i]
                     else:
-                        pomozn[datum] = sum(tab[i:i + N]) / N
-                pomozn = dict(reversed(pomozn.items()))
-                slovar_sma[kovanc] = pomozn
-        self.slovar_sma = slovar_sma
+                        extra[date] = sum(tab[i:i + N]) / N
+                extra = dict(reversed(extra.items()))
+                sma_dict[coin] = extra
+        self.sma_dict = sma_dict
 
     def getcoinSMAs(self,coin):
-        """Vrne SMA za dani kovanec"""
-        return self.slovar_sma[coin]
+        """For a given coin, returns SMA for every date: {date:SMA}"""
+        return self.sma_dict[coin]
 
-    def getTodaySMA(self,coin,datum):
-        """Vrne danasnji SMA za dani kovanec"""
-        return self.slovar_sma[coin][datum]
+    def getTodaySMA(self,coin,date):
+        """Returns today's SMA for a given coin"""
+        return self.sma_dict[coin][date]
 
