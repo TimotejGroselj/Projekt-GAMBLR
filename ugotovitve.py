@@ -25,10 +25,11 @@ for name,numbers in coini_profit.items():
     prof_max.append(max_prof(numbers[sorted(numbers.keys())[0]][1],coin_price[name]))
     proc_prof.append(prof[-1]/numbers[sorted(numbers.keys())[0]][1])
     print(f"Profit pri {name}: {prof[-1]}")
-    
+    #izračunamo profit bota ter največji profit če bi kupili in prodali ob najboljšem času
     plt.text(-0.3+št*1,prof_max[-1]+100,f"{round(prof_max[-1],2)}$")
     plt.text(-0.3+št*1,prof[-1]+100,f"{round(prof[-1],2)}$")
     št+=1
+    #dodamo texte na grafe na primerne lokacije,da so poravnani s histogrami
 plt.bar(coini_profit.keys(),prof,zorder=2,edgecolor = 'k',label="Profiti bota")
 plt.bar(coini_profit.keys(),prof_max,edgecolor = 'k',label="Največji možni profiti")
 plt.plot(coini_profit.keys(),[0 for _ in range(len(coini_profit.keys()))],color="k")
@@ -37,6 +38,7 @@ plt.xlabel("coin")
 plt.ylabel("profit")
 plt.show()
 plt.close()
+#izršemo histogram
 print(f"Povprečno bot vrne {100+100*(sum(proc_prof)/len(proc_prof))}% začetne investicije")
     
     

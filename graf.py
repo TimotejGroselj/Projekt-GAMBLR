@@ -46,11 +46,10 @@ if decider=="":
     fig.savefig(f"starting_data.pdf",bbox_inches="tight")
     plt.show()
     plt.close()
-    #ker je liho subplotov in malo prostora na zgornjih treh grafih je na zadnjem subplotu samo legenda
+    #ker je liho subplotov in malo prostora na zgornjih treh grafih za legendo je na zadnjem subplotu samo legenda
 
 decider=input("Hočeš posodobiti grafe za ocenjevalce trendov? (JA:press enter,NE:kr kol druzga): ")
 if decider=="":
-    #dobimo število dnevov za katere imamo podatke
     Path("EMAS").mkdir(parents=True, exist_ok=True)
     for coin_id in coin_prices.keys():
         fig=plt.figure(figsize=[19.2,10.8])
@@ -113,5 +112,5 @@ else:
         plt.legend()
         fig.savefig(f"findings\\{name}.pdf",bbox_inches="tight")
         plt.close()       
-  
+  #zrišemo še graf kako je bot kupoval/prodajal različne coine
     
