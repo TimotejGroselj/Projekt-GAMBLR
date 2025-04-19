@@ -3,7 +3,6 @@ from classdat import coin
 from datetime import date
 import pickle 
 
-
 class EMA:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d"),smoothing=2):
         """

@@ -6,7 +6,7 @@ import pickle
 class RSI:
     def __init__(self,N,dat = date.today().strftime("%Y-%m-%d")):
         """
-        :returns: {every_coin : {every_date:SMA}},where every_date is capped at "dat"
+        :returns: {every_coin : {every_date:RSI}},where every_date is capped at "dat"
         :param N: how many days are included in an interval
         :param dat: to which date it calculates RSI
         """

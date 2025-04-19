@@ -25,7 +25,6 @@ with open(f"data.bin","wb") as data:
             raise Exception("Unable to get data now.Try again!")
         coin_prices[el["id"]]=coin(response.json(),el["id"])
     pickle.dump(coin_prices,data)
-
 print("Update complete!")
 
 
