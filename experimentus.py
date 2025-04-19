@@ -24,7 +24,7 @@ class Gambler:
 
     def check_money(self):
         """
-        :return: (how much "coin" do you have, not invested money)
+        :return: how much "coin" do you have and leftover money
         """
         return self.repository,self.money
 
@@ -171,49 +171,3 @@ class Gambler:
             part_sum += abs(self.prices[dat] - average)
             if dat == date:break
         return (part_sum/(i+1))
-
-tab_indikatorjev = ["EMA","RSI","EMAC"] #kjer bodo mesta ubistvu al 1 (kup) al 0 (prodej) al pa 0.5 (drz)
-
-
-with open("data.bin", "rb") as data:
-    coin_price = pickle.load(data)
-kovanc = "ripple"
-
-
-price_k = coin_price[kovanc].getprices()
-tab_komb = [(9, 21), (12, 21), (14, 21), (9, 26), (12, 26), (14, 26), (9, 50), (12, 50), (14, 50)] #long_per = [21, 26, 50] #short_per = [9, 12, 14]
-#tab_komb = [(9, 21),(9, 26),(9, 50)]
-#best combos rsi #14 [(9, 21),(9, 26),(9, 50)],5 [(9,50),(14,50),(12,50)] use 5 or 14
-#tuki naprej sm jst uporabu nove stvari in delajo
-
-for short,long in [(9,50)]:
-    startmoneh = 10000
-    gamb = Gambler(kovanc,startmoneh,short,long)
-    tab = [0,0,0]
-    for i in price_k:
-        parameter = gamb.standard_deviation_ish(i)
-        signal = gamb.signal(i,parameter,14)
-        if signal == 1:
-            buy=gamb.check_money()[1]*abs(gamb.set_buy_sell(i))
-            gamb.buy(i,buy)
-            tab[0]+=1
-        elif signal == 0:
-            sell=gamb.check_money()[1]*abs(gamb.set_buy_sell(i))
-            gamb.sell(i,sell)
-            tab[2] += 1
-        else:
-            tab[1] += 1
-    gamb.sellall(i)
-    print(gamb.check_money(),tab,short,long) #drugi parameter ti pove kok mas se v $
-
-best_moni = {'bitcoin': (17304.385583417188, (9, 50)),
-             'ethereum': (6695.341925051774, (12, 50)),
-             'tether': (10010.789543453964, (14, 50)),
-             'ripple': (31538.02492690881, (9, 50)),
-             'binancecoin': (10051.823200701618, (9, 50)),
-             'solana': (15897.01064578032, (9, 50)),
-             'usd-coin': (10000.34919653982, (9, 21)),
-             'dogecoin': (12374.218810026, (9, 21)),
-             'cardano': (14487.853027886042, (9, 21)),
-             'tron': (17411.715821141595, (9, 50))}
-short_long_tab = [(9,50),(12,50),(14,50),(9,50),(9,50),(9,50),(9,21),(9,21),(9,21),(9,50)]
