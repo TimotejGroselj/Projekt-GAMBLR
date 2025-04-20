@@ -30,7 +30,7 @@ def simulato(coin_obj,short,long,mone=10000):
     return states
 
 
-is_updated() #updates data if necessary
+is_updated("data") #updates data if necessary
 
 with open("data.bin", "rb") as data:
     coin_prices = pickle.load(data)
