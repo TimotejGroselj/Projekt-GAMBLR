@@ -2,25 +2,25 @@ import datetime
 import requests
 class coin():
     """
-    vsebuje podatke o:
-    range datumov za katere imamo podatke
-    sl. cen
-    sl. market caps
-    sl. total volumnov
-    ime coina
+    consits of data about:
+    range of dates for which we have data
+    dict of prices
+    dict of market caps
+    dict total volumes
+    name of coin
     """
     def __init__(self,json,name):
         self.name=name
         data_=[json["prices"],json["market_caps"],json["total_volumes"]]
-        #razpakira vrednosti
+        #unpacks values
         data=[dict(),dict(),dict()]
         for i in range(len(data_[0])):
             nice_date=datetime.datetime.fromtimestamp(data_[0][i][0]/1000).strftime("%Y-%m-%d")
-            #zapiše datum v std obliko za projekt
+            #writes date in a std form for our project
             for j in range(3):
                 data[j][nice_date]=data_[j][i][1]
         [self.prices,self.market_caps,self.total_volumes]=data
-        #iz slovarja kjer so vrednosti pari ustvarimo 3 slovarje za cene market caps in total volumne
+        #from dict in which values are tuples we create 3 dict for prices market caps and total volumes
         
     def getprices(self):
         return self.prices

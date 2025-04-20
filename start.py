@@ -12,7 +12,7 @@ else:
     print("Updating...")
 graf_data=response.json()
 coin_prices=dict()
-
+#gets the names of coins
 
 with open(f"data.bin","wb") as data:
     for el in graf_data:
@@ -24,8 +24,9 @@ with open(f"data.bin","wb") as data:
         else:
             raise Exception("Unable to get data now.Try again!")
         coin_prices[el["id"]]=coin(response.json(),el["id"])
+        #gathers data about the coins and puts it into a class
     pickle.dump(coin_prices,data)
 print("Update complete!")
-
+#saves classes to a file
 
 

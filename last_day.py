@@ -1,7 +1,7 @@
 import datetime
 def yesterday(today):
     """
-    sprejme str oblike %Y-%m-%d ki predstavlja datum in vrne vcerjasnji dan v istem formatu
+    takes str of form %Y-%m-%d representing a date and returns yesterdays date in the same format
     """
     today=datetime.datetime.strptime(today,"%Y-%m-%d")
     yesterday=today-datetime.timedelta(days=1)

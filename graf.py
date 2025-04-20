@@ -37,7 +37,7 @@ if decider=="":
     axs[1][0].set_xlabel("date")
     axs[1][0].set_ylabel("total volume")
     axs[1][0].set_title("Total volumes")
-    #ustvarimo 3 grafe za začetne podatke, za občutek kako zgledajo vrednosti
+    #we create 3 graphs for starting data
     for obj_coin in coin_prices.values():
         axs[1][1].plot(0,0,label=obj_coin.getname(),linewidth =2)
     axs[1][1].set_title("Legend")
@@ -46,7 +46,7 @@ if decider=="":
     fig.savefig(f"starting_data.pdf",bbox_inches="tight")
     plt.show()
     plt.close()
-    #ker je liho subplotov in malo prostora na zgornjih treh grafih za legendo je na zadnjem subplotu samo legenda
+    #becouse there is odd number of subplots and not a lot of space in the other subplots for a legend i use the last subplot just for legend
 
 decider=input("Hočeš posodobiti grafe za ocenjevalce trendov? (JA:press enter,NE:kr kol druzga): ")
 if decider=="":
@@ -88,10 +88,10 @@ if decider=="":
         plt.legend()
         fig.savefig(f"SMAS\\SMAS for {coin_id}.pdf",bbox_inches="tight")
         plt.close()
-        #ustvarimo grafe vrednosti EM,RSI in SMA za vsak coin, kjer se sprehajamo po pogosto uporabljenih N da vidimo če sovpadajo s podatki.
-        #vsak coin je na svojem grafu zaradi preglednosti
-        #vsaka metoda ima grafe za vse coine v po metodi imenovanem direktoriju
-        #graf cene za coin ni vključen ker tudi z semilogy dobimo nepregledne grafe
+        #we create graphs for EM,RSI in SMA for each coin, where we use commonly used values for N to see how they match other data.
+        #each coin is on its own plot for visibility
+        #each method has its own folder for graphs
+        #i didnt include graph of prices in these graphs couse values dont align nicely even with semilogy
 
 decider=input("Hočeš simulirati trading bota za vse coine ali videti najnovejšo do zdaj simulirano simulacijo? (Posodobi:press enter,Staro:kr kol druzga): ")
 if decider=="":
@@ -112,5 +112,5 @@ else:
         plt.legend()
         fig.savefig(f"findings\\{name}.pdf",bbox_inches="tight")
         plt.close()       
-  #zrišemo še graf kako je bot kupoval/prodajal različne coine
+  #we draw a graph of how the bot bought and sold diffrent coins each day
     
