@@ -15,7 +15,7 @@ class RSI:
             previous = sez[0]
             gain, loss = 0, 0
             length = len(sez)
-            for i in range(1, length):
+            for i in range(1, length): #calcuate RSI
                 change = previous - sez[i]
                 if change > 0:
                     gain += change
@@ -38,14 +38,14 @@ class RSI:
                 id = list(prices).index(dat)
                 length, ost = len(tab), len(prices) % N
                 extra = {}
-                for i,date in enumerate(prices):
-                    if i < id:
+                for i,date in enumerate(prices): #calculates RSI for every date
+                    if i < id: #skip to current date
                         continue
-                    if i == length - ost:
+                    if i == length - ost: #take last elements and calculate RSI
                         rsi = getRSI(tab[i:])
                         extra[date] = rsi
                         continue
-                    elif i > length - ost:
+                    elif i > length - ost: #takes the RSI from previous if sentence
                         extra[date] = rsi
                     else:
                         rsi = getRSI(tab[i:i + N])

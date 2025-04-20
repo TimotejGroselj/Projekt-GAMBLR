@@ -96,17 +96,18 @@ class Gambler:
         """
         price_today = self.prices[date]
         combinations = [[self.shortN,self.shortN],[self.longN,self.longN],[self.longN,self.shortN],[self.shortN,self.longN]]
+        #we take different periods to know for sure if we want to buy, sell or hold
         desidion = 0
         for i in combinations:
             ema = EMA(i[0]).getTodayEMA(self.coin,date)
             sma = SMA(i[1]).getTodaySMA(self.coin,date)
-            if ema > price_today and sma > price_today:
+            if ema > price_today and sma > price_today: #if both are above price we add 1
                 desidion += 1
-            elif ema < price_today and sma < price_today:
+            elif ema < price_today and sma < price_today: #if both are below price we add 0
                 continue
             else:
                 desidion += 0.5
-        if 4 >= desidion >= 3: 
+        if 4 >= desidion >= 3: #decides whether to buy,hold or sell
             return 1
         if 3 > desidion >= 1:
             return 0.5
