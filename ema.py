@@ -19,12 +19,12 @@ class EMA:
                 coin,prices = i.getname(),i.getprices()
                 EMAp = 0
                 pomozn = {}
-                for date in prices:
-                    if EMAp == 0:
+                for date in prices: #calculates EMA
+                    if EMAp == 0: #starting ema
                         EMAp = prices[date]
                     value = prices[date]
                     EMAt = alpha * value + (1 - alpha) * EMAp
-                    pomozn[date] = EMAt
+                    pomozn[date] = EMAt #save EMA on current date
                     EMAp = EMAt
                     if date == dat: break
                 ema_dict[coin] = pomozn

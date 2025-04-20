@@ -10,6 +10,7 @@ if response.status_code!=200:
     print("Call limit exceeded!")
 else:
     print("Updating...")
+    print("This might take cca 5 min.")
 graf_data=response.json()
 coin_prices=dict()
 #gets the names of coins
