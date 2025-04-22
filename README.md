@@ -1,4 +1,4 @@
-# Projekt-avtizma
+# Projekt GAMBLR
 Projekt Jake Perbila in Timoteja Grošlja
 
 Program z uporabo podatkov iz api naslova https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=price_change_percentage_24h_desc&per_page=10&page=1&sparkline=false
