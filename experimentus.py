@@ -172,3 +172,7 @@ class Gambler:
             part_sum += abs(self.prices[dat] - average)
             if dat == date:break
         return (part_sum/(i+1))
+
+
+
+

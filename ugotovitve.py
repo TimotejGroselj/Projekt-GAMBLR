@@ -1,6 +1,7 @@
 import pickle
 from matplotlib import pyplot as plt
 from update import is_updated
+
 def max_prof(start_mone,obj_coin):
     """
     returns max profit, that we could get
@@ -12,11 +13,12 @@ def profit(numbers):
     """
     return numbers[sorted(numbers.keys())[-1]][1]-numbers[sorted(numbers.keys())[0]][1]
 
+is_updated("results")
 with open("results.bin","rb") as data:
     coini_profit=pickle.load(data)
 with open("data.bin", "rb") as data:
     coin_price = pickle.load(data)
-is_updated("results")
+
 fig=plt.figure(figsize=[19.2,10.8])
 prof=[]
 prof_max=[]
